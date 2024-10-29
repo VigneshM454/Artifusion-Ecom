@@ -1,0 +1,376 @@
+{% extends 'base.html' %}
+
+{% block title %} Seller-Products {% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/cart.css')}}">
+    <style>
+        main{
+            min-height: 84vh;
+        }
+        #newaddnew{
+            background-image: url('./../static/images/sun.png');
+            height: 200px;
+            width: 200px;
+            background-size: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10%;
+        }
+        .pr{
+            position: relative;
+        }
+        
+        .pab{
+            padding: 3px 0;
+            width: 95%;
+            height: 95%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .sp{
+            max-width: 330px;
+        }
+        #performance>div{
+            max-width: 300px;
+            border: 5px solid black;
+            border-radius: 15px;
+        }
+        .show1{
+            display: contents;
+        }
+        .hide1{
+            display: none;
+        }  
+        .pimg{
+            height: 50px;
+            width: 50px;
+        }
+        .salestat{
+            border: 1px solid #183153 !important;
+            border-radius: 20px;
+            min-width: 160px;
+            max-width: 350px;
+        }
+        .prodsimg{
+            width:80px; 
+            height:80px;
+            border-radius: 10px;
+            border: 2px solid black;
+        }
+        td{
+            position: relative;
+        }
+        #proddesc{
+            height: 130px;
+        }
+        .table-responsive{
+            line-height: 30px;
+        }
+        #addProddiv{
+            display: none;
+        position: absolute;
+        top: 25%;
+        left: 5%;
+        border: 1px solid black;
+        border-radius: 10px;
+        z-index: 3;
+        min-width: 250px;
+        max-width: 280px;
+        box-shadow: 0 0 50px black;
+      }
+      .table-responsive{
+        max-height: 55vh;
+      }
+      /*
+      #addProddiv {
+        left: 5%;
+        z-index: 10;
+        max-width: 350px;
+        top: 25%;
+      }
+      */
+      #divclose1{
+        font-family: sans-serif;
+        text-shadow: 0 0 10px black;
+        cursor: pointer;
+      }
+
+        @media screen and (width<350px) {
+
+            .prodsda{
+                max-width: 260px;
+            }
+        }
+    </style>
+    
+    {% include "sellerheader.html" %}
+
+   
+    <main class="container-fluid p-0 bg-back text-color">
+        {% set arr_length = sellerProd['ProdId']|length %}
+
+        <section class="s px-3 pt-4" id="sp">
+            <h1 class="text-center ">Products</h1>
+            <div id="performance" class="row  gap-3 px-3 m-0 my-4 d-flex align-items-center justify-content-center">
+                <div class="salestat col col-sm col-md col-lg d-flex flex-row justify-content-around  align-items-center bg-spl py-2 border">
+                    <img class="col-3 pimg" src="{{url_for('static',filename='images/product-range.png')}}" alt="">
+                    <div class="row col-9">
+                        <h6 class="my-1">Total Products Listed</h6>
+                        <p class="my-1"><b id="totsale">{{totprodlisted}}</b> </p>    
+                    </div>
+                </div>
+                <div class="salestat col col-sm col-md col-lg d-flex flex-row justify-content-around align-items-center bg-spl py-2 border">
+                    <img class="col-3 pimg" src="{{url_for('static',filename='images/out-of-stock.png')}}" alt="">
+                    <div class="row col-9">
+                        <h6 class="my-1">Total Products Sold</h6>
+                        <p class="my-1"><b>{{Qtysold}}</b> </p>
+                    </div>
+                </div>
+            </div>
+
+        {% if sellerProd['ProdId']|length !=0  %}
+            <div class="table-responsive " >
+                <table class="table table-bordered table-striped table-hover bg-back border-dark ">
+                    <thead>
+                        <tr>
+                            <th>Sl.No</th>
+                            <th>Prod Id</th>
+                            <th>Prod Name</th>
+                            <th>Prod Image</th>
+                            <th>Prod Price</th>
+                            <th>Qty Listed</th>
+                            <th>Qty Sold</th>
+                            <th style="min-width: 129px;">Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            {% set pg_length =pagearr|length %}
+
+                            {% for j in range(pg_length) %}
+                                {% if j==0 %}
+                                    {% set cls= 'show11' %}
+                                {% else %}
+                                    {% set cls= 'hide1' %}
+                                {% endif %}
+                                <tbody class="bg-back p-2 m-2 bd {{cls}}" id="bd{{j}}">
+                                {% for k in range(j*5,(j+1)*5) %}
+                                    {% if k < arr_length %}
+                                    <tr class="bg-dark pr">{% set pid =sellerProd['ProdId'][k] %}
+                                        {% set pname =sellerProd['ProdName'][k] %}
+                                        <td class="text-center">{{k+1}}</td>
+                                        <td class="text-center">{{sellerProd['ProdId'][k]}} </td>
+                                        <td class="text-center">{{sellerProd['ProdName'][k]}}</td>
+                                        <td class="text-center"><img src="{{sellerProd['ProdImg'][k]}}" alt="" class="prodsimg" /></td>
+                                        <td class="text-center">₹ {{sellerProd['ProdPrice'][k]}}</td>
+                                        <td class="text-center">{{sellerProd['QuantityListed'][k]}}</td>
+                                        <td class="text-center">{{sellerProd['QuantitySold'][k]}}</td>
+                                        <td class="  p-1 pr ">
+                                            <div class="pab row">
+                                                <button class="col btn bg-spl text-light"  onclick="addMoreQty({{pid}} , '{{sellerProd['ProdName'][k]}}')">Add More</button>
+                                                <a href="review/{{pid}}" class="btn btn-outline-dark" >View Reviews</a>     
+                                                <button class="btn btn-outline-danger" onclick="showDelProd({{pid}},'{{pname}}')">Delete </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}    
+                                {% endfor %}
+                                </tbody>
+                            {% endfor %}
+                    </tbody>
+                </table>
+        
+            </div>
+
+
+        {% endif %}
+
+    {% if arr_length !=0 and a>1 %}
+    <nav aria-label="Page navigation example" class="ov">
+        <ul class="pagination d-flex align-items-center justify-content-center my-3">
+        {% for i in range(a) %}              
+            <li class="page-item"><button class="page-link pg{{i}} bg-primary text-light" onclick="changecontent({{i}})" >{{i}}</button></li>
+        {% endfor %}
+        </ul>
+    </nav>
+    {% endif %}
+    <hr>
+        <div class="container-fluid w-100">
+            <div class="row gap-2 justify-content-center" id="sppar">
+                
+                <div id="addnew" class=" d-flex flex-column justify-content-center align-items-center gap-3 py-2">
+                    <h1 class="text-center">Add New Products</h1>
+                    <div id="newaddnew">
+                        <button class="btn btn-outline-primary" data-bs-toggle="modal" title="Profile" data-bs-target="#addprod">Add Products</button>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        </section>
+        </main>
+
+        <div id="addprod" class="modal  modal-fullscreen text-color" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Add new Product to sell</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addnewprod" enctype="multipart/form-data">
+                        <div class="d-flex  justify-content-center">
+                            <img src="{{url_for('static',filename='images/dummy-product.jpg')}}" alt="" height="100" width="100" class="rounded-circle border border-info p-1">
+                            <img src="" alt="" id="testda">
+                        </div>
+                <!---   
+                        <div class="form-floating mb-3 mt-3">
+                            <input alt="upload image" type="file" class="form-control" id="profimg" name="profimg">
+                            <label for="name">Profile Pic</label>
+                        </div>
+               -->
+                        <div class="form-floating mb-3 mt-3">
+                            <input type="text" required class="form-control" id="name" placeholder="Enter First Name" name="name">
+                            <label for="name">Product Name</label>
+                        </div>
+                        <div class="form-floating mb-3 mt-3">
+                            <input type="text" required class="form-control" id="price" placeholder="Enter Last Name" name="price">
+                            <label for="price">Product Price</label>
+                        </div>                       
+                        <div class="form-floating mb-3 mt-3">
+                            <input type="number" required class="form-control" id="qty" placeholder="Enter your Shop Name" name="shop">
+                            <label for="qty">Quantity</label>
+                        </div>
+                        <div class=" form-floating mb-3 mt-3">
+                            <h4>Select your product category</h4>
+                            <div class="form-check container col-12 w-100" id="cat">
+                            <div class="col-3">
+                                <input  type="radio" name="d" class="form-check-input checkboxgrp"  value="jewel" id="jw">
+                                <label class="form-check-label" for="jw">Jewelry</label>
+                            </div>
+                            <div class="col-3">
+                                <input  type="radio" name="d" class="form-check-input checkboxgrp"  value="homedecor" id="hd">
+                                <label class="form-check-label" for="hd">Home Decor</label>    
+                            </div>
+                            <div class="col-3">
+                                <input  type="radio" name="d"  class="form-check-input checkboxgrp" value="pottery" id="pot">
+                                <label class="form-check-label" for="pot">Pottery</label>    
+                            </div>
+                            <div class="col-3">
+                                <input  type="radio" name="d"  class="form-check-input checkboxgrp" value="toys" id="toy">
+                                <label class="form-check-label" for="toy">Toys & Games</label>    
+                            </div>
+                            <div class="col-3">
+                                <input  type="radio" name="d"  class="form-check-input checkboxgrp" value="furn" id="fur">
+                                <label class="form-check-label" for="fur">Furnitures</label>    
+                            </div>
+                            <div class="col-3">
+                                <input  type="radio" name="d"  class="form-check-input checkboxgrp" value="artwork" id="art">
+                                <label class="form-check-label" for="art">Art Works</label>    
+                            </div>
+                        
+                            </div>
+                        </div>
+                        
+                        <div id="refer" class="form-floating mb-3 mt-3">
+                            <textarea name="proddesc" required class="form-control" id="proddesc" cols="150" rows="10" placeholder="Give the descritption to your product" ></textarea>
+                            <label for="proddesc">Product Description</label>
+                        </div>
+                        <h4>Upload images for your products</h4>
+                     <!--     <div class="form-floating mt-3 mb-3">
+                            <input type="file" required class="form-control" id="pwd" placeholder="Enter password" name="password">
+                            <label for="pwd">Password</label>
+                          </div>
+                        -->
+                          <div class="row">
+                            <div class="form-floating mt-3 mb-3">
+                                <input type="file" multiple required class="form-control" id="imageips" placeholder="Enter Phone number" name="phoneno">
+                                <label for="imageips">Image</label>
+                              </div>
+                              <div id="imgdivs">
+                      <!--          <img src="" id="imgdisplay" alt="" class="" style="height: 50px; width: 50px;">
+                          -->    </div>
+                          </div>
+                         <br><br>
+                          <button id="cbuyer" class="btn btn-outline-dark w-100" type="submit">Create</button>
+                      
+                    </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <div class="addProddiv bg-light text-dark p-3  flex-column gap-2" id="addProddiv">
+            <div class="divhead d-flex flex-row justify-content-end" >
+              <h5 class="m-0 text-end" id="divclose1">X</h5>
+            </div>
+            <h3 class="m-0 text-center" id="divTitle">Add more products</h3>
+            <p class="text-center ps-1 m-0">Enter the number of products of (<span id="pname"></span>) which you want to add more</p>
+            <div id="refer" class="form-floating mb-1 mt-3">
+              <input type="number" required class="form-control" id="addInput"  name="addInput" min="1">
+              <label for="addInput">Quantity</label>
+            </div>
+            <button class="btn btn-dark" id="addBtn" >Add More Product</button>
+          </div>
+          
+          {% include "deleteDiv.html" %}
+    
+    {% include "modal.html" %}
+    
+     <script>
+        const deleteDiv=document.getElementById('deleteDiv')
+        document.getElementById('divTitle').innerText='Delete Product'
+        document.getElementById('deleteBtn').innerText='Delete '
+
+        document.getElementById('divclose').onclick=()=>{
+            deleteDiv.style.display='none'
+        }
+        document.getElementById('cancelDelBtn').onclick=()=>{
+            deleteDiv.style.display='none'
+        }
+        function showDelProd(id,name){
+            deleteDiv.style.display='flex'
+            document.getElementById('divPara').innerHTML=`Are you sure want to delete this product ? <b>${name}</b>`
+            document.getElementById('deleteBtn').onclick=()=>{
+                deleteDiv.style.display='none'
+                fetch(`${window.origin}/seller/deleteProd`,{
+                        method:'DELETE',
+                        headers:{
+                            'Content-Type':'application/json',
+                        },body:JSON.stringify({prodId:id})
+                    })
+                    .then(response=>response.json())
+                    .then(data=>{
+                        //console.log(data);
+                        //console.log(data.status_code);    
+                        if(data.status_code==200){
+                            window.location.reload()
+                            displayToast('Product deleted successfully','success')
+                        }else{
+                            displayToast(data.message,'danger')
+                        }
+                    }).catch(err=> {
+                        //console.log(err)
+                        displayToast("Some issue occured in deleting product",'danger')
+                    })
+            }
+        }
+
+        const bdarr=document.querySelectorAll('.bd')
+        function changecontent(i){
+            bdarr.forEach((elem) => {
+                elem.style.display='none'
+                //elem.classList.remove('show1')
+                //elem.classList.add('hide')
+            });
+            document.getElementById('bd'+i).style.display='contents'
+        }
+    </script>
+
+     <script src="{{url_for('static',filename='js/sellproducts.js')}}"></script>
+{% endblock %}

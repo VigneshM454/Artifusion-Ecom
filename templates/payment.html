@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+  <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+  <title>Payment</title>
+
+  <style>
+    .des-design {
+    height: 100vh;
+    background: url(/static/images/bg-main-desktop.png);
+    background-size: cover;
+    justify-content: center;
+    padding-left: 30px;
+  }
+</style>
+-->
+</head>
+<body class="row">
+  
+  
+  <div class="des-design   p-2 pt-3 ps-3 text-white d-flex flex-column col-lg-5 col-md-5 col-12">
+    <h2>Your Order Summary</h2>
+    <p>Product Name: Artician table <b>x</b>  1</p>
+    <p>Price: $300.00</p>
+    <p>Tax: $10.00</p><hr>
+    <p>Total: $310.00</p>
+  </div>
+  <div id="form" class="col-lg-6 col-md-6 col-12 p-3">
+    
+    <form action="" id="payform" class="d-flex flex-column gap-3">
+      <h1>Payment form</h1><br>
+      <div class="mb-3 mt-3">
+        <label for="email">Cardholder Name</label>
+        <input type="text" required="" class="form-control" id="email" placeholder="Enter Cardholder Name" name="email">
+      </div>
+      <div class="mb-3">
+        <label for="pwd">Card Number</label>
+        <input type="number" required="" class="form-control" id="pwd" placeholder="Enter Card Number" name="pswd">
+      </div>
+
+      <div class="cardesn row">
+        <div class="mb-3 col-7">
+          <label for="pwd">Exp.Date (MM/YY)</label>
+          <div class=" d-flex col-6">
+            <input type="number" required="" class="form-control col-3" min="1" max="12" placeholder="MM" id="expmonth">
+            <input type="number" required="" class="form-control col-3" min="25" max="45" placeholder="YY" id="expyear">
+  
+          </div>
+        </div>
+        <div class="mb-3 col-5">
+          <label for="pwd">CVC</label>
+          <input type="number" required="" class="form-control" placeholder=" e.g. 123" id="cvc" minlength="3" maxlength="4">
+        </div>
+      </div>
+
+      <button type="submit" data-bs-toggle="modal" title="Profile" data-bs-target="#pay-success"  id="verify" class="btn btn-primary w-100">Pay</button>
+    </form>
+       
+    </div>
+
+    <div id="pay-success" class="modal modal-fullscreen">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <div class="modal-title">Payment</div>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <div id="success">
+                  <img src="{{url_for('static',filename='images/icon-complete.svg')}}" alt="success icon">
+                  <h1>Thank you!</h1>
+                  <div id="pbs">
+                    <p>Your payment has be successful</p>
+                  <a href="/buyer-home" class="btn btn-primary">Goto Home</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script src="{{url_for('static',filename='js/bootstrap.bundle.min.js')}}"></script>
+
+  <script src="{{url_for('static',filename='js/payment.js')}}"></script>
+</body>
+</html>

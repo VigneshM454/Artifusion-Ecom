@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %} Admin-Products {% endblock %}
+
+{% block content %}
+    <style>
+        .show1{
+            display: contents;
+        }
+        .hide1{
+            display: none;
+        }
+        .prodsimg{
+            width:80px; 
+            height:80px;
+            border-radius: 10px;
+            border: 2px solid black;
+        }
+        .ov{
+            overflow: auto;
+        }
+        
+
+    </style>
+    {% include "adminheader.html" %}
+  
+    <main class="p-3 bg-back text-dark" >
+        {% if prodtable|length !=0  %}
+        
+        <section class="sa1" id="sp">
+            <h3 class="my-3">Product Table</h3>
+
+            <div class="table-responsive">
+                <table class="table table-bordered  table-hover  border-dark ">
+                    <thead>
+                        <tr>
+                            <th class="text-center bg-spl text-light" >Product Id</th>
+                            <th class="text-center bg-spl text-light" >Product Image</th>
+                            <th class="text-center bg-spl text-light" >Artician Id</th>
+                            <th class="text-center bg-spl text-light" >Product Name</th>
+                            <th class="text-center bg-spl text-light" >Product Price</th>
+                            <th class="text-center bg-spl text-light" >Total Qty</th>
+                            <th class="text-center bg-spl text-light">Qty Sold</th>
+                            <th class="text-center bg-spl text-light" >Remove</th>
+                        </tr>
+                    </thead>
+                        
+                        {% set arr_length = prodtable|length %}
+                        {% set pg_length =pagearr|length %}
+
+                        {% for j in range(pg_length) %}
+                        {% if j==0 %}
+                            {% set cls= 'show1' %}
+                        {% else %}
+                            {% set cls= 'hide1' %}
+                        {% endif %}
+                        <tbody class="bg-danger p-2 m-2 bd {{cls}}" id="bd{{j}}">
+                        {% for k in range(j*5,(j+1)*5) %}
+                            {% if k < arr_length %}
+                            <tr class="bg-dark ">
+                                <td class="text-center tdata "><p >p#{{prodtable[k][6]}}</p></td>
+                                <td class="text-center tdata "><img src="{{prodtable[k][0]}}" alt="product image" class="prodsimg tdata1 border-dark"  /></td>
+                                <td class="text-center tdata " ><p >{{prodtable[k][5]}}</p></td>                        
+                                <td class="text-center tdata " ><p >{{prodtable[k][1]}}</p></td>
+                                <td class="text-center tdata "> <p >₹{{prodtable[k][2]}}</p></td>
+                                <td class="text-center tdata " ><p >{{prodtable[k][4]}}</p></td>
+                                <td class="text-center tdata " ><p >{{prodtable[k][7]}}</p></td>
+                                <td class="text-center tdata "><button class="btn btn-outline-dark" onclick="(deleteProd({{prodtable[k][6]}},'{{prodtable[k][1]}}'))" >Delete</button></td>
+                            </tr>
+                            {% endif %}    
+                        {% endfor %}
+                        </tbody>
+                        {% endfor %}
+                </table>
+            </div>
+        </section>
+        <nav aria-label="Page navigation example" class="ov">
+            <ul class="pagination ov">
+            {% for i in range(a) %}              
+                <li class="page-item"><button class="page-link pg{{i}} btn-dark" onclick="changecontent({{i}})" >{{i}}</button></li>
+            {% endfor %}
+            </ul>
+        </nav>
+        {% else %}
+        <div class="d-flex align-items-center justify-content-center" style="min-height: 85vh;">
+            <h1>No products so far!</h1>
+        </div>
+        {% endif %}
+    </main>
+    {% include 'deleteDiv.html' %}
+    {% include "modal.html" %}
+    <script>
+
+document.getElementById('divTitle').innerText='Delete user'
+    document.getElementById('deleteBtn').innerText='Delete '
+
+    const deleteDiv=document.getElementById('deleteDiv')
+    document.getElementById('divclose').onclick=()=>{
+        deleteDiv.style.display='none'
+    }
+    document.getElementById('cancelDelBtn').onclick=()=>{
+        deleteDiv.style.display='none'
+    }
+    function deleteProd(prodId,productName){
+        deleteDiv.style.display='flex'
+        document.getElementById('divPara').innerHTML=`Are you sure want to delete this product ? <b>${productName}</b>`
+        document.getElementById('deleteBtn').onclick=()=>{
+            deleteDiv.style.display='none'
+
+            fetch(`${window.origin}/admin/product-delete`,{
+                method:'DELETE',
+                headers:{
+                    'Content-Type':'application/json',
+                },
+                body:JSON.stringify({prodId:prodId}),
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                //console.log(data);
+                //console.log(data.status_code);    
+                if(data.status_code==200){
+                    window.location.reload();
+                    displayToast(data.message,'success')
+                }else{
+                    displayToast(data.message,'danger')
+                }
+            }).catch(err=> {
+                //console.log(err)
+                displayToast(data.message,'danger')
+            })            
+        }
+    }
+
+
+        const bdarr=document.querySelectorAll('.bd')
+        function changecontent(i){
+            bdarr.forEach((elem) => {
+                elem.style.display='none'
+                //elem.classList.remove('show1')
+                //elem.classList.add('hide1')
+            });
+            document.getElementById('bd'+i).style.display='contents'
+        }
+    </script>
+
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %} Orders {% endblock %}
+
+{% block content %}
+   
+    {% include "header.html" %}
+
+    <main class="bg-back">
+        
+        <section class="s row m-0  p-3" id="s1" >
+            <div class="col-lg col-md p-3 d-flex flex-column gap-3 order-2 order-sm-2 order-2 order-lg-1 order-md-1">
+                <h1>About Our Commitment</h1>
+                <p>At ArtiFusion, we're dedicated to delivering products that go beyond expectations. We take pride in our commitment to quality, craftsmanship, and customer satisfaction.</p>
+                <div class="btn1">
+                    <a href="home" id="shopnow" class="btn btn-outline-light">Explore Our Shop</a>
+                    <a href="about.html" id="findout" class="btn btn-outline-light">Sell Your Products</a>
+                </div>
+            </div>
+            <div class="col-lg col-md  order-1 order-md-1 order-sm-1 order-lg-1">
+                <img src="{{ url_for('static', filename='images/OIP(2).jfif') }}" alt="" width="100%" style="height: 70vh;">
+            </div>
+        </section>
+        <br>
+        <section class="s row m-0  p-3" id="s6">
+            <div class="osimg col-lg-4 col-md-4 col-12"><img src="{{ url_for('static', filename='images/cos.webp') }}" alt="" height="100%" width="100%"></div>
+            <div class="oscont col-lg-8 col-md-8 col-12 d-flex gap-2 flex-column p-3">
+                <h1>Convenient Online Shopping Experience</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore temporibus vitae, nobis hic recusandae aspernatur illo laborum delectus eveniet voluptates.</p>
+                <div class="tdiv d-flex flex-row flex-wrap justify-content-between gap-4">
+                    <div class="tdiv1 d-flex col-lg-5 gap-2">
+                        <span class="osn d-flex align-items-center justify-content-center bg-light rounded-circle" style="width: 45px; height: 45px; padding: 10px;">01</span> 
+                        <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, repudiandae?</span> 
+                    </div>
+                    <div class="tdiv1 d-flex col-lg-5 gap-2">
+                        <span class="osn d-flex align-items-center justify-content-center bg-light rounded-circle" style="width: 45px; height: 45px; padding: 10px;">02</span> 
+                        <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, repudiandae?</span> 
+                    </div>
+                    <div class="tdiv1 d-flex col-lg-5 gap-2">
+                        <span class="osn d-flex align-items-center justify-content-center bg-light rounded-circle" style="width: 45px; height: 45px; padding: 10px;">03</span> 
+                        <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, repudiandae?</span> 
+                    </div>
+                    <div class="tdiv1 d-flex col-lg-5 gap-2">
+                        <span class="osn d-flex align-items-center justify-content-center bg-light rounded-circle" style="width: 45px; height: 45px; padding: 10px;">04</span> 
+                        <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, repudiandae?</span> 
+                    </div>
+
+                </div>
+                <div class="btndiv d-flex gap-4 w-100">
+                    <button class="btn btn-outline-danger w-100">Read More</button>
+                    <button class="btn btn-outline-danger w-100">Continue Shopping</button>
+                </div>
+            </div>
+        </section>
+        <br>
+        <section class="s  py-3" id="s2">
+            <div class="img_cont row m-0 d-flex  flex-nowrap overflow-auto">
+                <div class="img1 gap-1 col pt-3 pl-2 d-flex flex-column  ">
+                    <img class="rounded-circle" src="{{ url_for('static', filename='images/OIP(8).jfif') }}" height="60" width="60" alt="">
+                    <h4>Best Prices & Offers</h4>
+                    <p>Orders $50 or more</p>
+                </div>
+                <div class="img1 gap-1 col pt-3 d-flex flex-column  ">
+                    <img class="rounded-circle" src="{{ url_for('static', filename='images/download (2).jfif') }}" height="60" width="60" alt="">
+                    <h4>Free Delivery</h4>
+                    <p>24/7 amazing services</p>
+                </div>
+                <div class="img1 gap-1 col pt-3 d-flex flex-column  ">
+                    <img class="rounded-circle" src="{{ url_for('static', filename='images/OIP(10).jfif') }}" height="60" width="60" alt="">
+                    <h4>Great Daily Deal</h4>
+                    <p>When you sign up</p>
+                </div>
+                <div class="img1 gap-1 col pt-3 d-flex flex-column  ">
+                    <img class="rounded-circle" src="{{ url_for('static', filename='images/OIP(9).jfif') }}" height="60" width="60" alt="">                    
+                    <h4>Rapid Delivery</h4>
+                    <p>Within 5 days of order</p>
+                </div>
+                <div class="img1 gap-1 col pt-3 d-flex flex-column  ">
+                    <img class="rounded-circle" src="{{ url_for('static', filename='images/OIP(11).jfif') }}" height="60" width="60" alt="">
+                    <h4>Easy Returns</h4>
+                    <p>Within 30 days</p>
+                </div>
+                
+            </div>
+        </section>
+        
+        <hr>
+        <section class="s row m-0  p-3" id="s1" >
+            <div class="col-lg col-md p-3 d-flex flex-column gap-3 order-2 order-sm-2 order-2 order-lg-1 order-md-1">
+                <h1>Discover Our Handcrafted Products</h1>
+                <p>At ArtiFusion, we take pride in curating a diverse collection of handcrafted products. Each item is a testament to the skill and creativity of our artisans, making your shopping experience truly unique.</p>
+                <p>Explore our exclusive range of handcrafted treasures, and join over 150 happy customers who have found something special. With over 25 years of experience, we're dedicated to delivering the finest in craftsmanship and artistry.</p>
+                <div class="row">
+                    <div class="col border-dark border-2">
+                        <h2>500+ </h2>
+                        <p>Unique Artisanal Products</p>
+                    </div>
+                    <div class="col border-dark border-2">
+                        <h2>150+ </h2>
+                        <p>Satisfied Customers</p>
+                    </div>
+                    <div class="col border-dark border-2">
+                        <h2>25+ </h2>
+                        <p>Years of Craftsmanship</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg col-md  row m-0 order-1 order-md-1 order-sm-1 order-lg-1 gap-0" >
+                <div class="col-6 p-0" id="di1"><img src="{{ url_for('static', filename='images/OIP(3).jfif') }}" width="100%" height="100%" style="max-height: 40vh;" alt="">  </div>
+                <div class="col-6 p-0" id="di1"><img src="{{ url_for('static', filename='images/OIP(5).jfif') }}" width="100%" height="100%" style="max-height: 40vh;" alt="">  </div>
+                <div class="col-12 p-0" id="di3"><img src="{{ url_for('static', filename='images/jwl1.jfif') }}" width="100%" height="100%" style="max-height: 40vh;" alt=""></div>
+            </div>
+        </section>
+        <section class="as" id="as5"></section>
+        <section class="as" id="as6"></section>
+    </main>
+    {% include "modal.html" %}
+{% endblock %}

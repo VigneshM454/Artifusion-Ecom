@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+
+{% block title %} Profile {% endblock %}
+
+{% block content %}
+
+    <style>
+        .pfstyle{            
+            width: 120px;
+            height: 120px;
+            border: 2px solid black;
+            padding: 1px;
+            margin: 0;
+            border-radius: 50%;
+            background: grey;
+        }
+        .wrap{
+            overflow-wrap: break-word !important;
+        }
+        .updiv1{
+            max-width: 450px;
+            border-radius: 15px;
+            padding: 20px 10px;
+            border: 1px solid #3da8f4;
+        }
+        .upmain{
+            margin-top: 100px;
+            background:radial-gradient(#3da8f4, #d7faf0);
+        }
+        .pimgStyle{
+            height: 100px;
+            width: 100px;
+        }
+        .modal-content{
+            width: 85vh!important;
+        }
+        #deleteDiv{
+            display: none;
+        position: absolute;
+        top: 25%;
+        left: 5%;
+        border: 1px solid black;
+        border-radius: 10px;
+        z-index: 3;
+        min-width: 250px;
+        max-width: 250px;
+        box-shadow: 0 0 50px black;
+      }
+      #divclose{
+        font-family: sans-serif;
+        text-shadow: 0 0 10px black;
+        cursor: pointer;
+      }
+
+
+    </style>
+</head>
+<body class="">
+  {% include "header.html" %}
+
+   <main class=" row d-flex flex-column align-items-center container-fluid  m-0 py-3 upmain">
+    <div class="col bg-light px-3 pb-4 updiv1 ">
+        <div class="row   d-flex flex-column justify-content-center align-items-center m-0  mt-2">
+            {% if imgdata  %}
+            <img src={{imgdata}} alt="" class=" mb-2 pfstyle" >
+            {% else %}
+            <img src="{{url_for('static',filename='images/user.svg')}}" alt="" class=" mb-2 pfstyle">
+            {% endif %}
+            <h2 class="text-center wrap">{{user_data[1]}} {{user_data[2]}}</h2>
+            <h5 class="text-center wrap">{{user_data[4]}}</h5>
+        </div><br>
+        <div class="row">
+            <h3 class="text-underline">User info</h3>
+                <div class="row d-flex align-items-center justify-content-center">
+                    <p class="col-4 m-0 my-2"><b> First Name </b> </p>
+                    <p class="col-1 m-0 my-2"><b>:</b></p>
+                    <p class="col-6 m-0 my-2 wrap">{{user_data[1]}}</p>
+                </div>
+                <div class="row d-flex align-items-center justify-content-center">
+                    <p class="col-4 m-0 my-2"><b> Last Name </b> </p>
+                    <p class="col-1 m-0 my-2"><b>:</b></p>
+                    <p class="col-6 m-0 my-2 wrap">{{user_data[2]}}</p>
+                </div>
+                <div class="row d-flex align-items-center justify-content-center">
+                    <p class="col-4 m-0 my-2"><b> Email </b> </p>
+                    <p class="col-1 m-0 my-2"><b>:</b></p>
+                    <p class="col-6 m-0 my-2 wrap">{{user_data[3]}}</p>
+                </div>
+                <div class="row d-flex align-items-center justify-content-center">
+                    <p class="col-4 m-0 my-2"><b> Phone </b> </p>
+                    <p class="col-1 m-0 my-2"><b>:</b></p>
+                    <p class="col-6 m-0 my-2 wrap">{{user_data[4]}}</p>
+                </div>
+                <div class="row d-flex align-items-center justify-content-center">
+                    <p class="col-4 m-0 my-2"><b> Address </b> </p>
+                    <p class="col-1 m-0 my-2"><b>:</b></p>
+                    <p class="col-6 m-0 my-2 wrap">{{user_data[5]}}</p>
+                </div>
+                
+        </div>
+        <button class="btn w-100 btn-outline-dark w-100 mt-2" data-bs-toggle="modal" data-bs-target="#login">Edit Profile</button>
+        <button class="btn w-100 btn-outline-danger w-100 mt-2" id="deleteAcc">Delete Account</button>
+    </div>
+    
+
+    <div id="login" class="modal modal-fullscreen">
+        <div class="modal-dialog">
+            <div class="modal-content" style="height: 85vh;">
+                <div class="modal-header">
+                    <div class="modal-title">Artifusion</div>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="updateprofile" enctype="multipart/form-data">
+                        <div class=" d-flex align-items-center justify-content-center">
+                            <img src={{imgdata}} alt="" id="img" class="rounded-circle bg-info pimgStyle" >
+                        </div>
+                        <br>
+                        <div class="row">
+                            <label for="imageinput">Update image</label>
+                            <input type="file" id="imageinput" accept="image/*"/>
+                          </div>
+                          <br>
+                        <div class="form-floating mb-3 mt-3">
+                            <input type="text" value={{user_data[1]}}  class="form-control" id="firstname" placeholder="Enter First Name" name="fname">
+                            <label for="name">First Name</label>
+                          </div>
+                          <div class="form-floating mb-3 mt-3">
+                            <input type="text" value={{user_data[2]}} class="form-control" id="lastname" placeholder="Enter Last Name" name="lname">
+                            <label for="last">Last Name </label>
+                          </div>
+                       
+                          <div class="form-floating mt-3 mb-3">
+                            <input type="text"  class="form-control"   id="pwd" placeholder="Enter password" name="pswd">
+                            <label for="pwd">Enter new Password</label>
+                          </div>
+                          <div class="form-floating mt-3 mb-3">
+                            <input type="tel" value={{user_data[3]}} class="form-control" id="phoneno" placeholder="Enter phonenumber" name="phoneno">
+                            <label for="phoneno">Contact Number</label>
+                          </div>
+                          <div class="form-floating mt-3 mb-3">
+                            <input type="text" value={{user_data[5]}} class="form-control"  id="addr" placeholder="Enter Address" name="addr">
+                            <label for="addr">Address</label>
+                          </div>
+                          <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+                      
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>   
+
+    <div class="deleteDiv bg-light text-dark p-3  flex-column gap-3" id="deleteDiv">
+        <div class="divhead d-flex flex-row justify-content-end" >
+          <h5 class="m-0 text-end" id="divclose">X</h5>
+        </div>
+        <h3 class="m-0 text-center" id="divTitle">Delete Account</h3>
+        <p class="text-center ps-1 m-0">Are you sure want to delete your account ?</p>
+        <div class="d-flex flex-row gap-1">
+            <button class="btn btn-danger" id="deleteBtn" >Delete Account</button>
+            <button class="btn btn-dark" id="cancelDelBtn" >Cancel</button>
+        </div>
+    </div>
+
+
+    </main>
+
+   {% include "modal.html" %}
+   <script>
+    const deleteDiv=document.getElementById('deleteDiv')
+    document.getElementById('divclose').onclick=()=>{
+        deleteDiv.style.display='none'
+    }
+    document.getElementById('cancelDelBtn').onclick=()=>{
+        deleteDiv.style.display='none'
+    }
+    document.getElementById('deleteAcc').onclick=()=>{
+        deleteDiv.style.display='flex'
+    }
+    document.getElementById('deleteBtn').onclick=()=>{
+        deleteDiv.style.display='none'
+        fetch(`${window.origin}/buyer/deleteAccount`,{
+                method:'DELETE',
+                headers:{
+                    'Content-Type':'application/json',
+                },
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                //console.log(data);
+                //console.log(data.status_code);    
+                if(data.status_code==200){
+                    window.location.href='/logout'
+                    displayToast('Account deleted successfully','success')
+                }else{
+                    displayToast("Some issue occured in deleting account",'danger')
+                }
+            }).catch(err=> {
+                //console.log(err)
+                displayToast("Some issue occured in deleting account",'danger')
+            })
+    }
+
+    let profimg;  
+    const upform=document.getElementById('updateprofile')
+    const imgip= document.getElementById('imageinput');
+    const img=document.getElementById('img');
+    let formData=new FormData()
+    imgip.addEventListener('input',()=>{
+      if(imgip.files && imgip.files[0]){
+        formData.delete('file')
+        formData.append('file',imgip.files[0])
+        
+        const reader =new FileReader();
+        reader.onload= function(e){
+          //console.log(typeof e.target.result);
+          img.src=e.target.result;
+        };
+        reader.readAsDataURL(imgip.files[0])// this is used to display the choosen image in website
+        
+      }
+      //console.log(profimg);
+    })
+      
+    upform.addEventListener('submit',()=>{
+        event.preventDefault()
+        //console.log(profimg);
+        profimg=img.src
+        const fname=document.getElementById('firstname').value
+        const lname=document.getElementById('lastname').value
+        const addr=document.getElementById('addr').value
+        const phoneno=document.getElementById('phoneno').value        
+        const pwd=document.getElementById('pwd').value
+
+        formData.append('fname',fname)
+        formData.append('lname',lname)
+        formData.append('addr',addr)
+        formData.append('phone',phoneno)
+        formData.append('pwd',pwd)
+
+        const newprod={
+            fname:fname,
+            lname:lname,
+            addr:addr,
+            phone:phoneno,
+            pwd:pwd,
+           // pimgarr:profimg,
+        }
+            
+        fetch(`${window.origin}/buyer/userprofile/edit`,{
+            method:'POST',
+            /*
+            headers:{
+                'content-Type':'application/json',
+            },
+            */
+            body:formData,
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            if(data.status_code==200){
+                displayToast('Profile info updated successfully','success')
+                location.reload()
+            }else{
+                displayToast('Some error occured in updating profile','danger')
+                window.location.href='/buyer'
+            }
+        }).catch(error=>{
+            displayToast('Some error occured in updating profile','danger')
+        })      
+    })
+        
+ </script>
+{% endblock %}

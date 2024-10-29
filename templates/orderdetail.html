@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+
+{% block title %} OrderInfo {% endblock %}
+
+{% block content %}
+
+    <link rel="stylesheet" href="{{url_for('static',filename='css/cart.css')}}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        .overflowDiv{
+            overflow: overlay;
+        }
+    .ihead{
+        position: relative; 
+        background-color: black!important;
+    }
+    .ilogo{        
+        position: absolute;
+        height: 100%;
+        top: 0%;
+        left: 0%;
+        width: 25%;
+        border: none;
+    }
+    .ititle{
+        margin-left: 20%!important;
+    }
+    tr{
+        height: 30px;
+    }
+    .prices {
+        text-align: center !important;
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 5px;    /* gap: 25%; */
+    }
+    .pricechild{
+        width: 35%;
+    }
+    .invoice{        
+        border: 3px solid black;
+        max-width: 800px;
+    }
+  
+    </style>
+
+</head>
+<body>
+    {% include "header.html" %}
+    <main class="bg-back">
+        {%  if prodetail1!=[] and orderdetail2 !=[] %}
+            <div class="orders row bg-back p-2 py-3 d-flex flex-column gap-2 m-0">
+                <h2 class="m-0 p-3">Order Detail <b>#ATF{{orderdetail2[0]}}</b></h2>
+                <div class="row d-flex justify-content-start align-items-center ">
+                    <div class="col-6 col-md-4 col-lg-4">
+                        <img  src="{{prodetail1[0]}}" style=" border-radius: 10px; height: 100%; width: 100%; min-height: 120px;" alt="">    
+                    </div>
+                    <div class="col-5 col-md-4 col-lg-4">
+                        <div class="row">
+                            <p>Order_Date: <b id="odate">{{orderdetail2[6]}}</b></p>
+                            <p>Order_Status: <b>{{orderdetail2[5]}}</b></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="proddetail">
+                    <div class="row mt-4 ">
+                        <p class="col-5 col-md-5 col-lg-4">Product Name</p>
+                        <p class="col-1"><b>:</b></p>
+                        <p class="col-6 col-md-5 col-lg-4 overflowDiv"> {{prodetail1[1]}}</p>
+                    </div>
+                    <div class="row">
+                        <p class="col-5 col-md-5 col-lg-4">Product Cost (for 1 unit)</p>
+                        <p class="col-1"><b>:</b></p>
+                        <p class="col-6 col-md-5 col-lg-4">₹ {{prodetail1[2]}} /-</p>
+                    </div>
+                    <div class="row">
+                        <p class="col-5 col-md-5 col-lg-4">Quantity</p>
+                        <p class="col-1"><b>:</b></p>
+                        <p class="col-6 col-md-5 col-lg-4">{{orderdetail2[7]}}</p>
+                    </div>
+                    <div class="row">
+                        <p class="col-5 col-md-5 col-lg-4">Payment Status </p>
+                        <p class="col-1"><b>:</b></p>
+                        <p class="col-6 col-md-5 col-lg-4">
+                            {% if orderdetail2[4] =='payonorder' %}
+                                <span class="text-success">Paid</span>
+                            {% else %}
+                            <span class="text-warning">Pending</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p class="col-5 col-md-5 col-lg-4">Shipping Address </p>
+                        <p class="col-1"><b>:</b></p>
+                        <p class="col-6 col-md-5 col-lg-4 overflowDiv">{{orderdetail2[2]}}</p>
+                    </div>
+                    <div class="row">
+                        <p class="col-5 col-md-5 col-lg-4">Total Amount </p>
+                        <p class="col-1"><b>:</b></p>
+                        <p class="col-6 col-md-5 col-lg-4">₹ {{orderdetail2[3]}} /-</p>
+                    </div>
+                </div>
+                <div class="btndiv d-flex justify-content-end">
+                    <a href="javascript:generatePdf()" id="downloadbtn" class="btn btn-outline-dark " style="max-width: 200px; ">Download Invoice</a>
+                </div>
+            </div>
+            <br>
+            <div class="containdiv d-flex flex-column align-items-center">
+                <div class=" m-2 bg-light invoice" id="whattoprint">
+                    <div class="row ihead m-0 p-3 bg-dark text-light">
+                        <div class="ilogo2 col-4">
+                            <img class=" ilogo " src="{{url_for('static',filename='images/2.png')}}"  alt="">
+                        </div>
+                        <div class="col-8">
+                            <h1 class="m-0  ititle2 ">Artifusion Ecommerce Store</h1>
+                        </div>
+                      <!--  
+          -->
+                  </div>
+                    <div class="ibody p-2 p-sm-2 p-lg-5 p-md-5  py-3 mt-3">
+                        <h3 class="text-center mb-4 porder">Purchase Order</h3>
+                        <div class="row my-lg-4 my-md-4 my-2">
+                            <div class="col">
+                                <h6 class="text-danger">INVOICE TO:</h6>
+                                <p class="m-0">Name: {{user_data[1]}} {{user_data[2]}}</p>
+                                <p class="m-0">Address: {{user_data[5]}}</p>
+                                <p class="m-0">Phone: {{user_data[3]}}</p>
+                            </div>
+                            <div class="col">
+                                <p class="m-0"><b>Invoice No.: {{orderdetail2[0]}}</b></p>
+                                <p class="m-0"><b >Invoice Date: <span id="invoicedate">
+                                    {{orderdetail2[6]}}
+                                </span> </b></p>
+                            </div>
+                        </div>
+                        <table class="table table-bordered table-striped table-hover table-danger border-dark ">
+                            <thead >
+                                <tr>
+                                    <th class="bg-danger text-light">NO</th>
+                                    <th class="bg-danger text-light">DESCRIPTION</th>
+                                    <th class="bg-danger text-light">QTY</th>
+                                    <th class="bg-danger text-light">PRICE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>01</td>
+                                    <td>{{prodetail1[1]}}</td>
+                                    <td>{{orderdetail2[7]}}</td>
+                                    <td>₹{{prodetail1[2]}} </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col">
+                                {% if orderdetail2[4] =='payonorder' %}
+                                    <p class="m-0"> PAYMENT STATUS: <span class="text-success">Paid</span> </p>
+                                {% else %}
+                                    <p class="m-0"> PAYMENT STATUS: <span class="text-warning">To be Paid</span> </p>
+                                    <p class="m-0">PAYMENT METHODS:  Card</p>
+                                    <p class="m-0">PAYMENT DUE: <span id="duedate">{{orderdetail2[6]}}</span></p>
+                                {% endif %}
+                                </div>
+                            <div class="col text-right">
+                                <p class="prices"><span>SUBTOTAL:</span> <span class="pricechild">₹{{prodetail1[2] * orderdetail2[7]}} </span> </p>
+                                <p class="prices"><span>TAXES:</span>  <span class="pricechild">₹{{prodetail1[2] * orderdetail2[7] *0.1}} </span> </p>
+                                <p class="prices "><span class="ps-3 bg-danger text-light">TOTAL:</span> <span class="pricechild bg-danger text-light">₹{{orderdetail2[3]}}/-</span> </p>
+                            </div>
+                        </div>
+                        <p class="text-center mt-3"><b>Thanks for your purchase!</b></p>
+                    </div>
+                </div>
+            </div>
+
+
+        {% else %}
+            <h1 class="text-danger w-100 p-5 my-5 text-center">{{err['ordermsg']}}</h1>
+        {% endif %}
+    </main>
+    {% include "modal.html" %}
+   <script>
+        const dateconst=5.5*60*60*1000;
+        
+        let odate=document.getElementById('odate')
+        let duedate=document.getElementById('duedate')
+        let invoicedate=document.getElementById('invoicedate')
+        const dateobj=new Date(odate.textContent)
+        const consttime=new Date(dateconst)
+
+        const IstDate=new Date(dateobj.getTime()+dateconst)
+        let strdate1=String(IstDate).substring(0,25)
+        odate.innerText= invoicedate.innerText='( '+strdate1+' )'
+        let dtime=new Date(7*60*60*1000)
+        //console.log(IstDate.getDate());
+        let delivery=new Date(IstDate)
+        delivery.setDate(delivery.getDate()+8)
+        delivery.setHours(18)
+        delivery.setMinutes(30)
+        duedate ? duedate.innerText= "( "+ String(delivery).substring(0,25) + " )" :''
+        //console.log(IstDate);
+        //console.log(delivery);
+        let delstr=String(delivery)
+        //console.log(String(delivery).length);
+        //console.log( String(delivery).substring(0,25));
+
+        async function generatePdf(){
+        var downloading=document.getElementById('whattoprint')      
+        var doc=new jsPDF('p','pt')
+        await html2canvas(downloading,{
+            allowTaint:true,
+            useCORS:true,
+            width:770
+        }).then((canvas)=>{
+            doc.addImage(canvas.toDataURL("image/png"),"PNG",50,50,714,565)
+        })
+        doc.save("demo.pdf")
+
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}E-commerce{% endblock %}</title>
+    <link rel="shortcut icon" href="{{url_for('static',filename='images/2.png')}}" type="image/x-icon">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <style>
+
+        .toastify .toast-close {
+            
+            color: black;  /* Change the icon color to black */
+            font-size: 18px; /* Increase the icon size if needed */
+            opacity: 1; /* Ensure it's fully visible */
+        }
+        .toast-close{
+            color: white;
+        }
+        .toastify{
+            min-width: 150px;
+        }
+        .toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1055;
+        }
+        footer{
+            min-height: 5vh;
+        }
+        /* styles from footer */
+            
+   .btn-outline-dark{
+        background-color: transparent;
+        color: #183153;
+        border: 1px solid #183153;
+    }
+    .btn-outline-dark:hover{
+        background-color: #183153;
+        color: white;
+    }
+    .bg-spl:hover{
+        background-color:#2188e8;
+    }
+    .bg-header{
+        background-color: #183153;
+    }
+    .bg-back{
+            background-color: #6fc3f3; /*#3da8f4;*/
+        }
+    .bg-input{
+        background-color: #e4e0e0;
+    }
+    .text-color{
+        color:  #183153;
+    }
+    .img-rad{
+        border-radius: 12px;
+    }
+    .bg-spl{
+        background-color:#2188e8;/* #205ead;
+*/    }
+    .bg-spl2{
+        background-color: #205ead;
+    }
+    .bg-spl2:hover{
+        background-color: #205ead;
+    }
+    
+    #alertDiv{
+        display: none;
+        position: absolute;
+        bottom: 50px;
+        right:20%;
+        border: 2px solid black;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="base">
+        {% block content %}{% endblock %}
+        <footer class="bg-dark text-light row m-0 p-3 py-0" >    
+            <div class="row  m-0">
+                <p class="text-center m-0">Copyright@ 2023  By VigneshM454 . All Rights Reserved</p>
+            </div>
+        </footer> 
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+          {% for category, message in messages %}
+            <div class="toast align-items-center text-bg-{{ category }} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+          {% endfor %}
+        {% endwith %}
+    </div>
+
+    <script src="{{url_for('static',filename='js/bootstrap.bundle.min.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script>
+     const infoStyle = {
+        background: "#17a2b8", // Bootstrap info color
+        color: "white",
+    };
+    const successStyle = {
+        background: "#28a745", // Bootstrap success color
+        color: "white",
+    };
+    const warningStyle = {
+        background: "#ffc107", // Bootstrap warning color
+        color: "black",
+    };
+    const dangerStyle = {
+        background: "#dc3545", // Bootstrap danger color
+        color: "white",
+    };
+
+    const alertStyle={"info":infoStyle,"success":successStyle,"warning":warningStyle,"danger":dangerStyle}
+
+    function displayToast(msg,color){
+            Toastify({
+                text: msg,
+                duration: 3000,
+                close:true,
+                gravity: "top", // `top` or `bottom`
+                position: "right", // `left`, `center`, or `right`
+                stopOnFocus: true, // Prevents dismissing on hover
+                style: {
+                    borderRadius: "8px",
+                    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                    padding: "10px 15px",
+                    ...alertStyle[color]
+                }
+            }).showToast();
+    }
+
+     const message = "{{ get_flashed_messages()[0] }}";
+     let [msg,color]=message.split('|')
+     if (message) {
+        displayToast(msg,color)
+    } 
+    </script>
+    <script>
+         var tooltipTrigger = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTrigger.map(function (El) {
+            return new bootstrap.Tooltip(El)
+        })
+
+    </script>
+</body>
+</html>

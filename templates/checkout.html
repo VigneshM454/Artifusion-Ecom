@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="shortcut icon" href="{{url_for('static',filename='images/2.png')}}" type="image/x-icon">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/cart.css')}}">
+    <style>
+        .err{
+          display: none;
+        }
+        .radio{
+          accent-color: #183153;
+        }
+        #changeaddr{
+          /*
+          max-width: 250px;
+          */
+        }
+        /*
+        #mod-cont{
+          background-color: #09ea60;
+          height: 330px;
+        }
+        #pay-success{
+            display: flex;
+            z-index: 5;
+            padding: 10px;
+            gap: 10px;
+            position: absolute;
+            top: 23%;
+          
+            display: none;
+        }
+        #success{
+            padding: 20px;
+            gap: 10px;
+        }
+        #mhead{
+            padding: 10px;
+            padding-bottom: 0;
+        }*/
+    </style>
+
+</head>
+<body class="bg-back">
+    {% include "header.html" %}
+
+   <main class="container p-5 px-3 mt-4 bg-light text-color" style="max-width: 600px; border-radius: 12px;">
+        <div class="row">
+            <h1>Checkout</h1>
+        </div>
+        <br >
+        <div class="row billadd" id="bill">
+            <h5>User Details</h5>
+            <div class="row">
+                <div class="col">
+                    <p>Name</p>
+                    <p>Email</p>
+                    <p>Phone</p>
+                    <p>Address</p>
+                </div>
+                <div class="col">
+                    <p>{{user_data[1]}} {{user_data[2]}} </p>
+                    <p>{{user_data[4]}}</p>
+                    <p>{{user_data[3]}}</p>
+                    <p id="addr">{{user_data[5]}}</p>
+                </div>
+            </div>
+            <div class="row m-0 d-flex align-items-center justify-content-center">
+              <button class="btn bg-spl2 text-light" id="changeaddr">Change Shipping Address</button>
+            </div>
+            <br>
+        </div>
+
+        <br><hr class="w-100">
+        <h2>Your Order</h2>
+        <br>
+        <div class="row billorder">
+          <div class="col py-1 d-flex flex-column gap-2" id="productname">
+            <p> <b>Product</b> </p>
+
+        </div>
+          <div class="col py-1 d-flex flex-column gap-2" id="productprice">
+            <p> <b>Price</b> </p>
+
+        </div>  
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <h5>Subtotal</h5>
+                <h5>Tax & Service Charges(10%)</h5>
+            </div>
+            <div class="col" > 
+                <h5 id="subtotal"> </h5>
+                <h5 id="tax"> </h5>    
+            </div>
+        </div>
+        <hr>
+        <div class="row ordertotal">
+            <div class="col h4"> Total</div>
+            <div class="col h4" id="total"> </div>
+        </div><br>
+        <h2>Choose Payment type</h2>
+        <div class="col paymethod">
+            <div class="col gap-1">
+                <input  type="radio" class="radio" checked name="pay" id="pn">
+                <label class="ps-3" for="pn">  Pay now</label> 
+            </div>
+            <div class="col gap-1">
+                <input  type="radio" class="radio" name="pay" id="pd">
+                <label class="ps-3" for="pd">Pay on delivery</label>
+
+            </div>
+        </div>
+        <br>
+        <button class="btn btn-outline-dark w-100" id="placeorder">Place Order</button>
+        <br>
+<!--lg-6 col-md-6 col-12-->
+        <br>
+        <div id="form" class="col p-3">
+          <br>
+            <form action="" method="post" id="payform" class="d-flex flex-column gap-3 col-12">
+              <h1>Payment form</h1>
+              <div class="mb-3 mt-3">
+                <div class="d-flex">
+                  <label for="email">Cardholder Name</label>
+                  <p class="err px-1">No special characters allowed</p>  
+                </div>
+                <input type="text" required="" class="form-control" id="cname" placeholder="Enter Cardholder Name" name="email">
+              </div>
+              <div class="mb-3">
+                <label for="pwd">Card Number</label>
+                <input type="number" required="" class="form-control" id="cnum" placeholder="Enter Card Number" minlength="10" maxlength="12" name="pswd">
+              </div>
+        
+              <div class="cardesn row">
+                <div class="mb-3 col-7">
+                  <label for="pwd">Exp.Date (MM/YY)</label>
+                  <div class=" d-flex gap-1 col-6">
+                    <input type="number" required="" class="form-control col-2" id="expmonth" min="1" max="12" placeholder="MM" id="expmonth">
+                    <input type="number" required="" class="form-control col-3" id="expyear" min="25" max="45" placeholder="YY" id="expyear">
+          
+                  </div>
+                </div>
+                <div class="mb-3 col-5">
+                  <label for="pwd">CVC</label>
+                  <input type="number" required="" class="form-control" id="cvc" placeholder=" e.g. 123" id="cvc" min="101" max="9999">
+                </div>
+              </div>
+        
+              <button type="submit"  onclick="validatepay()" data-bs-toggle="modal" data-bs-target="#pay-success" title="Profile"  id="verify" class="btn btn-outline-dark w-100">Pay</button>
+             
+            </form>
+               <!-- -->
+            </div>
+        
+   </main>
+
+
+<div id="pay-success" class="modal modal-fullscreen ">
+  <div class="modal-dialog">
+      <div class="modal-content"  style="border-radius: 15px;">
+          <div class="modal-header">
+              <div class="modal-title">Payment</div>
+              <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div id="success" class="d-flex flex-column align-items-center">
+              <img src="{{url_for('static',filename='images/icon-complete.svg')}}" alt="success icon">
+              <h1>Thank you!</h1>
+              <div id="pbs" class="d-flex align-items-center flex-column">
+                <p>Your payment has be successful</p>
+              <a href="/buyer" class="btn btn-primary">Goto Home</a>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+   <br>
+   {% include "modal.html" %}
+    {% include "footer.html" %}
+   <script src="{{url_for('static',filename='js/bootstrap.bundle.min.js')}}"></script>
+   <script src="{{url_for('static',filename='js/foot.js')}}"></script>
+   <script src="{{ url_for('static', filename='js/checkout.js') }}"></script>
+</body>
+</html>

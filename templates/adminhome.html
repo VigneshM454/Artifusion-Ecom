@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+{% block title %} Admin-Home {% endblock %}
+
+{% block content %}
+    <style>
+        .graphs{
+            min-width: 450px;
+            min-height: 450px;
+        }
+        
+        .piechart{
+        }
+        .graphsdiv{
+            overflow: scroll;
+        }
+        .biggraph,.smallgraph{
+            border: 2px solid black;
+        }
+        .salestat{
+            border-radius: 12px;
+        }
+        .sales{
+            min-width: 160px;
+        }
+        .stat{
+            min-width: 130px;
+        }
+        .pname{
+            min-width: 150px;
+        }
+        .prodsimg{
+            width:80px; 
+            height:80px;
+            border-radius: 10px;
+            border: 2px solid black;
+        }
+        td{
+            position: relative;
+        }
+        .tdata{                
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            margin: 0 !important;
+            top: 0;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            right: 0;
+        }
+
+        .dashboard{
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            grid-template-rows: repeat(2,1fr);
+        }
+        .dashdiv{
+            border-radius: 20px; text-align: center;
+        }
+        .dashdiv:hover{
+            color: white;
+        }
+        #paymentchart,#prodqtchart,#categorychart{
+            max-height: 40vh;
+        }
+        @media screen and (max-width:350px) {
+            .dashboard{
+                display: flex;
+                flex-direction: column;
+            }        
+        }
+        @media screen and (width>350px)  and ( width<1000px) {
+            .stat{
+                max-width: 265px;
+            }   
+        }
+    </style>
+    {% include "adminheader.html" %}
+  
+   <main class="container-fluid bg-back text-dark" >
+
+    <section class="s " id="sh">
+    </br>
+    <div id="performance" class="row  gap-3 px-1 m-0 my-3">
+        <div class="salestat sales col col-sm col-md col-lg d-flex flex-row justify-content-around align-items-center bg-spl py-2 border">
+            <img class="col-3 pimg" src="{{url_for('static',filename='images/sales.png')}}" alt="">
+            <div class="row col-9">
+                <h6 class="m-0">Total Sales</h6>
+                <p class="m-0"><b id="totsale"> ₹{{tot}}</b> </p>    
+            </div>
+        </div>
+        <div class="salestat stat col col-sm col-md col-lg d-flex flex-row justify-content-around align-items-center bg-spl py-2 border">
+            <img class="col-3 pimg" src="{{url_for('static',filename='images/shopping-bag.png')}}" alt="">
+            <div class="row col-9">
+                <h6 class="m-0">Total Orders</h6>
+                <p class="m-0"><b>{{countData[0]}}</b> </p>
+            </div>
+        </div>
+        <div class="salestat  stat col col-sm col-md col-lg d-flex flex-row justify-content-around align-items-center bg-spl py-2 border">
+            <img class="col-3 pimg" src="{{url_for('static',filename='images/supply-chain.png')}}" alt="">
+            <div class="row col-9">
+                <h6 class="m-0"> Total Products</h6>
+                <p class="m-0"> <b>{{countData[3]}}</b> </p>
+            </div>
+        </div>
+        <div class="salestat stat col col-sm col-md col-lg d-flex flex-row justify-content-around align-items-center bg-spl py-2 border">
+            <img class="col-3 pimg" src="{{url_for('static',filename='images/buyer.png')}}" alt="">
+            <div class="row col-9">
+                <h6 class="m-0"> Total Buyers</h6>
+                <p class="m-0"> <b>{{countData[1]}}</b> </p>
+            </div>
+        </div>
+        <div class="salestat stat col col-sm col-md col-lg d-flex flex-row justify-content-around align-items-center bg-spl py-2 border">
+            <img class="col-3 pimg" src="{{url_for('static',filename='images/seller.png' )}}" alt="">
+            <div class="row col-9">
+                <h6 class="m-0"> Total Sellers</h6>
+                <p class="m-0"> <b>{{countData[2]}}</b> </p>
+            </div>
+        </div>
+    </div>
+    <div id="grapdivs" class="row  p-1 d-flex justify-content-around m-0 ">
+        <div class="salesgraph biggraph graphsdiv  darkborder col-12 col-md-6 col-lg-6 bg-light py-1 py-md-0 " >
+            <p><b>Sales</b>  </p>
+            <canvas id="saleschart" class="graphs" width="400" height="400"></canvas>
+        </div>
+        <div class="col-12 col-md-6 col-lg-6 row m-0 p-0 py-1 py-md-0  gap-1 d-flex justify-content-around">    
+            <div class=" smallgraph graphsdiv  darkborder row bg-light col-12 ">
+                <p><b>Products</b> </p>
+                <canvas id="prodqtchart" class="graphs" width="400" height="400"></canvas>
+            </div>
+            <div class=" row m-0 d-flex justify-content-around py-1 py-md-0 px-0 gap-1">
+                <div class="smallgraph graphsdiv  darkborder  bg-light col-12  col-lg-5">
+                    <p><b>Payment</b> </p>
+                    <canvas id="paymentchart" class="piechart" width="400" height="400"></canvas>
+                </div>
+                <div class="smallgraph graphsdiv  darkborder bg-light col-12 py-1 py-md-0  col-lg-6  " >
+                    <p><b>Category of Products</b>   </p>
+                    <canvas id="categorychart" class="piechart" width="400" height="400"></canvas>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+    {% set topProdLen = topselprod['ProdName']|length %}
+
+    <div class="topselprod">
+        {% if topProdLen > 0 %}
+        <h1 class="mx-0 my-3">Top Selling Products</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered  table-hover table-danger text-dark border-dark">
+                <thead>
+                    <tr>
+                        <th class="bg-spl text-light text-center">No</th>
+                        <th class="bg-spl text-light text-center">ProdImg</th>
+                        <th class="bg-spl text-light col-5 text-center pname">ProdName</th>
+                        <th class="bg-spl text-light text-center">Quantity Sold</th>
+                        <th class="bg-spl text-light text-center">UnitPrice</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(topProdLen) %}
+                    <tr  >
+                        <td><p class="tdata">{{i}}</p> </td>
+                        <td class="d-flex align-items-center justify-content-center tdata1">
+                            <img src="{{topselprod['ProdImg'][i]}}" alt="" class="prodsimg ">
+                        </td>
+                        <td >
+                            <p class="tdata p-2"><b>{{topselprod['ProdName'][i]}}</b> </p>
+                        </td>
+                        <td>
+                            <p class="tdata">{{topselprod['QuantitySold'][i]}}</p>
+                        </td>
+                        <td>
+                            <h6 class="tdata">₹ {{topselprod['ProdPrice'][i]}}</h6>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div>
+            <h1 class="text-color text-center " style="min-height: 30vh;">No Products sold so far!</h1>
+        </div>
+        {% endif %}
+    </div>
+
+</section>
+   </main>
+    {% include "modal.html" %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>    
+
+    <script>
+        const ctx = document.getElementById('paymentchart').getContext('2d');
+        const stx=document.getElementById('saleschart').getContext('2d')
+        const qtx=document.getElementById('prodqtchart').getContext('2d')
+        const categorytx=document.getElementById('categorychart').getContext('2d');    
+        const myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Pay on Delivery',  'Pay on Order'],
+                datasets: [{
+                    label: 'Payments',
+                    data: {{ paymethod_data | safe }},
+                    backgroundColor: ['blueviolet','fuchsia'],
+                    borderColor: 'black',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const schart=  new Chart(stx, {
+            type: 'bar',
+            data: {
+                labels: {{prodlabel | safe }},
+                datasets: [{
+                    label: 'Payments',
+                    data: {{ prodsalearr | safe }},
+                    backgroundColor: ['green','red'],
+                    borderColor: 'black',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const qchart=  new Chart(qtx, {
+            type: 'bar',
+            data: {
+                labels: {{prodlabel | safe }},
+                datasets: [{
+                    label: 'Quantity',
+                    data: {{ prodqtarr | safe }},
+                    backgroundColor: ['green'],
+                    borderColor: 'black',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const catchart = new Chart(categorytx, {
+            type: 'pie',
+            data: {
+                labels: {{category_label | safe}},
+                datasets: [{
+                    label: 'Payments',
+                    data: {{ category_count | safe }},
+                    backgroundColor: ['blueviolet','fuchsia','yellow','tomato','skyblue','pink'],
+                    borderColor: 'black',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+
+    </script>
+{% endblock %}

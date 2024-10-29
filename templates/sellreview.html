@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block title %} Seller-Review {% endblock %}
+
+{% block content %}
+    <style>
+        .linebtn{
+            max-width: 150px;
+        }
+        main{
+            min-height: 84vh;
+        }
+    </style>
+    {% include "sellerheader.html" %}
+    
+        <main class="container-fluid bg-back text-color" >
+        {% set rlen=reviews|length  %}
+        {% if rlen !=0 %}
+    
+        <section class="container-fluid  row m-0">  
+            <!-- <section class="s" id="sr"> -->
+            <div class="review pt-3">
+                <h3>Customer Reviews & Ratings</h3>
+                <div class="d-flex align-items-center flex-row gap-2">
+                    <div>
+                        {% for i in range(favgrev) %}
+                        <img src="{{ url_for('static', filename='images/star.png')}}" alt="" height="20" width="20">
+                        {% endfor %}
+                        {% for i in range(5-favgrev) %}
+                        <img src="{{ url_for('static', filename='images/star1.png')}}" alt="" height="20" width="20">
+                        {% endfor %}
+                    </div>
+                    <p class="m-0">{{avgrev}} out of 5</p>
+                </div>
+                <br>
+                <hr>
+                <div class="revcontain col">
+                    {% for i in range(rlen) %}
+                    {#  #}
+                    <div class="col rev1" id="rev{{reviews[i][0]}}" >
+                
+                        <div class=" revname d-flex flex-row align-items-center m-1 gap-2 ">
+                            {% if revinfo[i][3] %}
+                            <img src="{{revinfo[i][3]}}" style="width:30px; height: 30px; padding: 0; border-radius: 50%;" alt="">
+                            {% else %}
+                            <img src="{{defaultImg}}" style="width:30px; height: 30px; padding: 0; border-radius: 50%;" alt="">                            
+                            {% endif %}
+                            {% if revinfo[i][0] %}
+                            <p class="m-0"><b> {{revinfo[i][0]}} {{revinfo[i][1]}} </b></p>
+                            {% else %}
+                            <p class="m-0"><b> Deleted Account </b></p>
+                            {% endif %}
+                        </div>
+                        <div class="row revhead">
+                            <p>
+                                {% for i in range(reviews[i][2]) %}
+                                <img src="{{ url_for('static', filename='images/star.png')}}" alt="" height="15" width="15">
+                                {% endfor %}
+                                {% for i in range(5-reviews[i][2]) %}
+                                <img src="{{ url_for('static', filename='images/star1.png')}}" alt="" height="15" width="15">
+                                {% endfor %}
+                            </p>    
+                        </div>
+                        <div class="revdesc row mx-1">
+                            <p>{{reviews[i][3]}}</p>
+                        </div>
+                        <div class="row revuse d-flex  gap-1 align-items-center mx-1">
+                            <button class="btn linebtn  btn-outline-dark col" >Helpful</button>
+                            <button class="btn linebtn btn-danger col">Report</button>
+                            <button class="btn linebtn bg-spl text-white col" onclick="createreplydiv('rev{{reviews[i][0]}}')">Reply</button>
+                        </div>
+                        <br>
+                    </div>
+                        {% if reviews[i][8] in slrid['buyerid'] %}
+
+                            <div class="col rev1 ms-4 ms-sm-5 ms-md-5 ms-lg-5 d-flex flex-column "  >                
+                                <div class=" revname d-flex flex-row align-items-center m-1 gap-2 ">
+                                    <img src="{{imgdata}}" style="width:30px; height: 30px; padding: 0; border-radius: 50%;" alt="">
+                                    <p class="m-0 "><b> You  </b></p>
+                                </div>
+                                <div class="revdesc row mx-1 mt-1 ms-5">
+                                    <p> {{slrid['rkey'][reviews[i][8]]}} </p>
+                                </div>
+                            </div>
+                            <hr>
+
+                        {% else %}
+                            <hr>
+                            <br>
+                        {% endif %}
+                    {% endfor %}    
+                </div>
+                <br>
+            </div>
+            <!--
+            <br>
+            <hr>
+                </section>  -->
+        </section>
+    
+        {% else %}
+            <h2 class="my-0 mx-3 text-center d-flex align-items-center justify-content-center" style="min-height:80vh; ">Sorry so far no reviews !</h2>
+        {% endif %}
+    
+    </main>
+
+    {% include "modal.html" %}
+
+     <script>
+        /*
+        //console.log('hi');
+function createreplydiv(id){
+    const parentrev=document.getElementById(id)
+    if(parentrev.childElementCount==5){
+        //console.log(id);
+        //console.log(parentrev.childElementCount);
+        let btnid=String(id).replace('rev','')
+        let i=parseInt(btnid)
+        let a={{ reviews[i] |safe }}
+        //console.log(a);
+        let b=''
+
+        const inputdiv=`
+        <div class="m-0  row mb-3  mx-1 d-flex flex-row gap-2" >
+        <input type="text" required=""  class="form-control col-7" id="msg${btnid}" placeholder="Reply..."  name="revreply" style="width:75%!important; max-width:500px">
+
+        <button type="submit"   onclick="addreply(${btnid})"  id="${'btn'+btnid}" class="btn btn-primary col-3 d-flex align-items-center justify-content-center" style="max-width: 50px !important; min-width: 50px;">
+            <img src="/static/images/send1.png" alt="" style="width:80%;height:80%">
+
+        </button>
+        </div>        
+        `
+        const replydiv=document.createElement('div')
+        replydiv.classList.add('reply')
+        replydiv.id='child'+id
+        replydiv.innerHTML=inputdiv
+        parentrev.append(replydiv)
+        //console.log(parentrev.childElementCount);    
+    }
+    else{
+        var child=document.getElementById('child'+id)
+        parentrev.removeChild(child)
+    }
+}
+function addreply(id){
+    let inpdiv=document.getElementById('msg'+id)
+    if(inpdiv.value.length>=5){
+        alert(inpdiv.value)
+        //console.log(id);//reviewid 
+        let inpval=inpdiv.value;//revtext
+        //console.log(inpval);
+        let reply={
+            'reply':inpval,
+            'revid':id
+        }
+        //console.log(reply);
+        inpdiv.value=''   
+        
+        fetch(`${window.origin}/seller/review/reply`,{
+            method:"POST",
+            headers:{
+              "content-Type":"application/json",
+            },
+            body:JSON.stringify(reply),
+          })
+          .then(response=>response.json())
+          .then(data=>{
+            //console.log(data.status_code);
+           const replies= document.querySelectorAll('.reply')
+           replies.forEach((elem)=>{
+            elem.style='display:none;'
+           })
+            if(data.status_code==200){
+              //console.log('Reply added successfully')
+              // revform.classList.remove('hide')
+              // revform.classList.add('show')      
+            //  function addrev(){
+              //}
+            }
+            else if(data.status_code==404){
+              alert('You have already given your reply to this review')
+            }
+            else{
+              alert('some error has occured'+data.status_code)
+            } 
+          })
+          .catch(error=>alert("error da "+error))
+
+    }
+    else{
+        alert('please give your reply in atleast 5 characters')
+    }
+}*/
+
+     </script>
+     <script src="{{url_for('static',filename='js/sellreview.js')}}"></script>
+{% endblock %}

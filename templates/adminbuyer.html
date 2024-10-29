@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %} Admin-Buyer {% endblock %}
+
+{% block content %}
+
+    <style>
+        .main{
+            min-height: 80vh;
+        }
+        .show1{
+            display: contents;
+        }
+        .hide1{
+            display: none;
+        }     
+        .prodsimg{
+            width:80px; 
+            height:80px;
+            border-radius: 10px;
+            border: 2px solid black;
+        }
+        td{
+            position: relative;
+        }
+        /*
+        .tdata{                
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            margin: 0 !important;
+            top: 0;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            right: 0;
+            text-align: center;
+        }*/
+        .minht{
+            min-width: 140px!important;
+        }
+        .os{
+            overflow: scroll;
+            min-width: 150px;
+        }
+    </style>
+
+    {% include "adminheader.html" %}
+  
+   <main class="p-3 bg-back text-dark main" >
+    {% set arr_length = buyertable1|length %}
+    {% set pg_length =pagearr|length %}
+
+    {% if buyertable1|length !=0  %}
+    <section class="sa1" id="su">
+        <h3 class="my-3">Customer(Buyer) table</h3>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover  border-dark ">
+                <thead>
+                    <tr>
+                        <th class="text-center bg-spl text-light">UserId</th>
+                        <th class="text-center bg-spl text-light">Profile</th>
+                        <th class="text-center bg-spl text-light ">Name</th>
+                        <th class="text-center bg-spl text-light ">Mobile</th>
+                        <th class="text-center bg-spl text-light   ">Email</th>
+                        <th class="text-center bg-spl text-light  ">Address</th>
+                        <th class="text-center bg-spl text-light  ">Delete User</th>
+                    </tr>
+                </thead>
+
+                    {% for j in range(pg_length) %}
+                    {% if j==0 %}
+                        {% set cls= 'show1' %}
+                    {% else %}
+                        {% set cls= 'hide1' %}
+                    {% endif %}
+                    <tbody class="bg-danger p-2 m-2 bd {{cls}}" id="bd{{j}}">
+                    {% for k in range(j*5,(j+1)*5) %}
+                        {% if k < arr_length %}
+                        <tr class="bg-dark ">
+                            <td class="text-center tdata"><p class="">{{buyertable1[k][0]}}</p>  </td>
+                            <td class="text-center tdata">
+                                {% if buyertable1[k][7] %}
+                                    <img src="{{buyertable1[k][7]}}" alt="" class="prodsimg border-dark" />
+                                {% else %}
+                                    <img src="{{defaultImg}}" alt="" class="prodsimg border-dark" />
+                                {% endif %}
+                            </td>
+                            <td class="text-center tdata"><p class="">{{buyertable1[k][1]}} {{buyertable1[k][2]}}</p>   </td>
+                            <td class="text-center tdata"><p class="">{{buyertable1[k][3]}}</p>  </td>
+                            <td class="text-center tdata"><p class=" ">{{buyertable1[k][4]}}</p>  </td>
+                            <td class="text-center tdata"><p class="">{{buyertable1[k][5]}}</p>  </td>  
+                            <td class="text-center tdata"><button class="btn btn-outline-dark" onclick="deleteUser({{buyertable1[k][0]}},'{{buyertable1[k][4]}}')">Delete</button> </td>  
+                        </tr>
+                        {% endif %}    
+                    {% endfor %}
+                    </tbody>
+                    {% endfor %}
+
+            </table>
+        </div>
+    </section>
+    <nav aria-label="Page navigation example">
+        {% if a>1 %}
+        <ul class="pagination">
+        {% for i in range(a) %}              
+            <li class="page-item"><button class="page-link pg{{i}} btn-dark" onclick="changecontent({{i}})" >{{i}}</button></li>
+        {% endfor %}
+        {% endif %}
+        </ul>
+    </nav>
+
+    {% include "deleteDiv.html" %}
+    
+    {% else %}
+    <div class="d-flex align-items-center justify-content-center" style="min-height: 85vh;">
+        <h1>No Buyers so far!</h1>
+    </div>
+    {% endif %}
+
+   </main>
+    {% include "modal.html" %}
+    <script>
+        const bdarr=document.querySelectorAll('.bd')
+        function changecontent(i){
+            bdarr.forEach((elem) => {
+                elem.style.display='none'
+                //elem.classList.remove('show1')
+                //elem.classList.add('hide1')
+            });
+            document.getElementById('bd'+i).style.display='contents'
+        }
+
+
+    document.getElementById('divTitle').innerText='Delete user'
+    document.getElementById('deleteBtn').innerText='Delete '
+
+    const deleteDiv=document.getElementById('deleteDiv')
+    document.getElementById('divclose').onclick=()=>{
+        deleteDiv.style.display='none'
+    }
+    document.getElementById('cancelDelBtn').onclick=()=>{
+        deleteDiv.style.display='none'
+    }
+    function deleteUser(userId,userMail){
+        deleteDiv.style.display='flex'
+        document.getElementById('divPara').innerHTML=`Are you sure want to delete this user ? <b>${userMail}</b>`
+        document.getElementById('deleteBtn').onclick=()=>{
+            deleteDiv.style.display='none'
+            //console.log(userId)
+            //console.log(typeof userId);
+            //console.log(userMail)
+
+            fetch(`${window.origin}/admin/buyer-delete`,{
+                method:'DELETE',
+                headers:{
+                    'Content-Type':'application/json',
+                },
+                body:JSON.stringify({userId:userId}),
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                //console.log(data);
+                //console.log(data.status_code);    
+                if(data.status_code==200){
+                    window.location.reload();
+                    displayToast('User deleted successfully','success')
+                }else{
+                    displayToast("Some issue occured in deleting user's account",'danger')
+                }
+            }).catch(err=> {
+                //console.log(err)
+                displayToast("Some issue occured in deleting user's account",'danger')
+            })            
+        }
+    }
+    </script>
+
+{% endblock %}

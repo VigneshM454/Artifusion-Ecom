@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %} Seller-Home {% endblock %}
+
+{% block content %}
+    <style>
+        /*
+        .show{
+            display: contents;
+        }
+        .hide{
+            display: none;
+        }/*
+        .pgnav{
+            overflow-x: scroll;
+        }
+    */    
+    </style>
+    
+     {% include "sellerheader.html" %} 
+    <main class="container-fluid  mt-0 bg-back" style="min-height: 84vh;">
+        <section class="s" id="so">
+            {% if not isempty  %}
+                <h1 class="py-4">Orders</h1>
+                <div class="table-responsive " style="line-height: 30px;">
+                    <table class="table table-bordered table-striped table-hover bg-back border-dark ">
+                        <thead>
+                            <tr>
+                                <th>Order No</th>
+                                <th>Customer Id</th>
+                                <th>Shipping Addr</th>
+                                <th>Order Status</th>
+                                <th>Order Date</th>
+                                <th>Payment Type</th>
+                                <th>Product Details</th>
+                                <th>Total Amt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                {% set arr_length = orderdata|length %}
+                                {% set pg_length =pagearr|length %}
+
+                                {% for j in range(pg_length) %}
+                                    {% if j==0 %}
+                                        {% set cls= 'show' %}
+                                    {% else %}
+                                        {% set cls= 'hide' %}
+                                    {% endif %}
+                                    <tbody class="bg-danger p-2 m-2 bd {{cls}}" id="bd{{j}}">
+                                    {% for k in range(j*5,(j+1)*5) %}
+                                        {% if k < arr_length %}
+                                        <tr class="bg-dark ">
+                                            <td>{{k+1}}</td>
+                                            <td>{{orderdata[k][0]}}</td>
+                                            <td>{{orderdata[k][2]}}</td>
+                                            <td>{{orderdata[k][6]}}</td>
+                                            <td>{{orderdata[k][7]}}</td>
+                                            <td>{{orderdata[k][5]}}</td>
+                                            <td>{{orderdata[k][3]}}</td>
+                                            <td>₹ {{orderdata[k][4]-(orderdata[k][4]*0.1)}}</td>
+                                        </tr>
+                                        {% endif %}    
+                                    {% endfor %}
+                                    </tbody>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+            
+                </div>
+
+            {% else %}
+                <div class="d-flex align-items-center justify-content-center" style="min-height: 85vh;">
+                    <h1>No orders so far!</h1>
+                </div>
+            {% endif %}
+
+        </section>
+        {% if not isempty and a>1  %}
+
+        <nav aria-label="Page navigation example ">
+            <ul class="pagination pgnav d-flex flex-row align-items-center  justify-content-center" style="gap: 2px;">
+            {% for i in range(a) %}
+
+                <li class="page-item"><button class="page-link pg{{i}} bg-header text-light" onclick="changecontent({{i}})" >{{i}}</button></li>
+            {% endfor %}
+            </ul>
+          </nav>
+        {% endif %}
+    </main>
+
+    {% include "modal.html" %}
+
+    <script>
+        const bdarr=document.querySelectorAll('.bd')
+        function changecontent(i){
+            bdarr.forEach((elem) => {
+                elem.style.display='none'
+                //elem.classList.remove('show')
+                //elem.classList.add('hide')
+            });
+            document.getElementById('bd'+i).style.display='contents'
+        }
+    </script>
+  {% endblock %}
+
+</div>

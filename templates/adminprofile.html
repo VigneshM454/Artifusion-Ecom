@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}
+    <style>
+        .wrap{
+            word-wrap: break-word;
+        }
+        .profImg{
+            width:100px;
+            height: 100px;
+        }
+        .divInMain{
+            max-width:450px; 
+            border-radius: 15px;
+        }
+        main{
+            margin-top: 100px;
+        }
+        .headImg{
+            height: 100px;
+            width: 100px;
+            border-radius: 20%;
+            border: 1px solid black;
+        }
+    </style>
+    {% include "adminheader.html" %}
+
+    
+    <main class=" row d-flex flex-column align-items-center container-fluid  m-0 text-dark bg-light" >
+    
+        <div class="col bg-back px-3 pb-3 my-3 divInMain" >
+            <div class="row   d-flex flex-column justify-content-center align-items-center m-0 ">
+                <img src={{imgdata}} alt="" class="p-0 mt-3 mb-2 headImg" >
+                <h3 class="text-center">{{user_data[1]}} {{user_data[2]}}</h3>
+                <h6 class="text-center">{{user_data[4]}}</h6>
+            </div><br>
+            <div class="row">
+                <h3 class="text-underline">User info</h3>
+                <div class="row d-flex align-items-center justify-content-center">
+                    <p class="col-4 m-0 my-2"><b> First Name </b> </p>
+                    <p class="col-1 m-0 my-2"><b>:</b></p>
+                    <p class="col-6 m-0 my-2 wrap">{{user_data[1]}}</p>
+                </div>
+                <div class="row d-flex align-items-center justify-content-center">
+                    <p class="col-4 m-0 my-2"><b> Last Name </b> </p>
+                    <p class="col-1 m-0 my-2"><b>:</b></p>
+                    <p class="col-6 m-0 my-2 wrap">{{user_data[2]}}</p>
+                </div>
+                <div class="row d-flex align-items-center justify-content-center">
+                    <p class="col-4 m-0 my-2"><b> Email </b> </p>
+                    <p class="col-1 m-0 my-2"><b>:</b></p>
+                    <p class="col-6 m-0 my-2 wrap">{{user_data[4]}}</p>
+                </div>
+                <div class="row d-flex align-items-center justify-content-center">
+                    <p class="col-4 m-0 my-2"><b> Phone </b> </p>
+                    <p class="col-1 m-0 my-2"><b>:</b></p>
+                    <p class="col-6 m-0 my-2 wrap">{{user_data[3]}}</p>
+                </div>
+            </div>
+            <button class="btn  btn-outline-dark w-100 my-1" data-bs-toggle="modal" data-bs-target="#login">Edit Profile</button>
+        </div>
+    
+        <div id="login" class="modal modal-fullscreen text-dark">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header text-dark bg-spl">
+                        <div class="modal-title">Atrifusion</div>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal">''</button>
+                    </div>
+                    <div class="modal-body text-dark bg-back">
+                        <form action="" id="updatesprofile" enctype="multipart/form-data">
+                            <div class=" d-flex align-items-center justify-content-center">
+                                <img src={{imgdata}} alt="" id="img" class="rounded-circle bg-info profImg" >
+                            </div>
+                            <br>
+                            <div class="row">
+                                <label for="imageinput">Update image</label>
+                                <input type="file" id="imageinput" accept="image/*"/>
+                              </div>
+                              <br>
+                            <div class="form-floating mb-3 mt-3">
+                                <input type="text" value="{{user_data[1]}}"  class="form-control" id="firstname" placeholder="Enter First Name" name="fname">
+                                <label for="name">First Name</label>
+                              </div>
+                              <div class="form-floating mb-3 mt-3">
+                                <input type="text" value="{{user_data[2]}}" class="form-control" id="lastname" placeholder="Enter Last Name" name="lname">
+                                <label for="last">Last Name </label>
+                              </div>
+                              <div class="form-floating mt-3 mb-3">
+                                <input type="text"  class="form-control"    id="pwd" placeholder="Enter password" name="pswd">
+                                <label for="pwd">Enter new Password</label>
+                              </div>
+                              <div class="form-floating mt-3 mb-3">
+                                <input type="tel" value="{{user_data[3]}}" class="form-control" id="phoneno" placeholder="Enter phonenumber" name="phoneno">
+                                <label for="phoneno">Contact Number</label>
+                              </div>
+                              <button type="submit" class="btn btn-dark w-100" data-bs-dismiss="modal">Update Profile</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>   
+        
+    </main>
+
+    {% include "modal.html" %}
+
+     <script>
+        let profimg;  
+        const upform=document.getElementById('updatesprofile')
+        const imgip= document.getElementById('imageinput');
+        const img=document.getElementById('img');
+        let formData=new FormData()
+        
+        imgip.addEventListener('input',()=>{
+          if(imgip.files && imgip.files[0]){
+            //formData=null;
+            //formData=new FormData()
+            formData.delete('file')
+            formData.append('file',imgip.files[0])
+            const reader =new FileReader();
+            reader.onload= function(e){
+              //console.log(typeof e.target.result);
+    
+              img.src=e.target.result;
+              profimg=e.target.result;
+              //console.log(profimg);
+              
+            };
+            reader.readAsDataURL(imgip.files[0])
+          }
+          //console.log(profimg);
+        })
+        profimg=img.src;
+
+          
+        upform.addEventListener('submit',()=>{
+            event.preventDefault()
+            //console.log(profimg);
+    
+            const fname=document.getElementById('firstname').value
+            const lname=document.getElementById('lastname').value
+            const phoneno=document.getElementById('phoneno').value
+            const pwd=document.getElementById('pwd').value
+
+            formData.append('fname',fname)
+            formData.append('lname',lname)
+            formData.append('phone',phoneno)
+            formData.append('pwd',pwd)
+            
+            fetch(`${window.origin}/admin/userprofile/edit`,{
+                method:'POST',
+                body:formData,
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                if(data.status_code==200){
+                    location.reload()
+                    // localStorage.setItem('alertMsg','Profile info updated successfully')
+                    displayToast('Profile info updated','success')
+                }else{
+                    displayToast('Some issue in updating profile','danger')
+                    window.location.href='/admin/home'
+                }
+            })  
+            .catch(error=>{
+                displayToast('Some issue in updating profile','danger')
+            })      
+          /*  }
+            else{
+                alert('please fill out the necessary details')
+            }*/
+        })
+            
+     </script>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %} Admin-orders {% endblock %}
+
+{% block content %}
+    <style>
+        .show1{
+            display: contents;
+        }
+        .hide1{
+            display: none;
+        }        
+        .caps{
+            text-transform: capitalize;
+        }
+
+    </style>
+</head>
+<body>
+    {% include "adminheader.html" %}
+  
+   <main class="p-3 bg-back text-dark" style=" min-height: 100vh;">
+    {% set arr_length = ordertable|length %}
+    {% set pg_length =pagearr|length %}
+
+    {% if arr_length !=0  %}
+    <section class="sa1" id="so">
+        <h3 class="my-3">Order Table</h3>
+
+        <div class="table-responsive">
+            <table class="table table-bordered  table-hover bg-back border-dark ">
+                <thead>
+                    <tr>
+                        <th class="text-center bg-spl text-light">Order Id</th>
+                        <th class="text-center bg-spl text-light">Customer Id</th>
+                        <th class="text-center bg-spl text-light">Payment Method </th>
+                        <th class="text-center bg-spl text-light">Shipping Addr</th>
+                        <th class="text-center bg-spl text-light">Order Status</th>
+                        <th class="text-center bg-spl text-light">Order Date</th>
+                        <th class="text-center bg-spl text-light">Product Details</th>
+                        <th class="text-center bg-spl text-light">Total Amount</th>
+                    </tr>
+                </thead>
+
+                    {% for j in range(pg_length) %}
+                        {% if j==0 %}
+                            {% set cls= 'show1' %}
+                        {% else %}
+                            {% set cls= 'hide1' %}
+                        {% endif %}
+                        <tbody class="bg-danger p-2 m-2 bd {{cls}}" id="bd{{j}}">
+                        {% for k in range(j*5,(j+1)*5) %}
+                            {% if k < arr_length %}
+                            <tr>
+                                <td class="tdata">{{ordertable[k][0]}}</td>
+                                <td class="tdata">{{ordertable[k][1]}}</td>
+                                <td class="caps tdata">{{ordertable[k][7]}}</td>
+                                <td class="tdata">{{ordertable[k][2]}}</td>
+                                <td class="caps tdata">{{ordertable[k][3]}}</td>
+                                <td class="tdata">{{ordertable[k][4]}}</td>
+                                <td class="tdata">{{ordertable[k][5]}}</td>
+                                <td class="tdata">₹ {{ordertable[k][6]}}</td>
+                            </tr>                        
+                            {% endif %}    
+                        {% endfor %}
+                        </tbody>
+                    {% endfor %}
+
+            </table>
+        </div>
+    </section>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+        {% if a > 1 %}
+        {% for i in range(a) %}              
+            <li class="page-item"><button class="page-link pg{{i}} btn-dark" onclick="changecontent({{i}})" >{{i}}</button></li>
+        {% endfor %}
+        {%endif %}
+        </ul>
+    </nav>
+    {% else %}
+    <div class="d-flex align-items-center justify-content-center" style="min-height: 85vh;">
+        <h1>No orders so far!</h1>
+    </div>
+    {% endif %}
+
+
+   </main>
+    {% include "modal.html" %}
+    <script>
+        const bdarr=document.querySelectorAll('.bd')
+        function changecontent(i){
+            bdarr.forEach((elem) => {
+                elem.style.display='none'
+                //elem.classList.remove('show1')
+                //elem.classList.add('hide1')
+            });
+            document.getElementById('bd'+i).style.display='contents'
+        }
+    </script>
+{% endblock %}

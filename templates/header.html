@@ -1,0 +1,110 @@
+<style>
+    header{
+        height: 4.4rem;
+    }
+    .prod {
+        min-height: 250px;
+        gap: 15px;
+        min-width: 200px;
+    }
+/*    .active1{
+        background-color: white;
+        color: black;
+    }
+*/    .tooltip-inner{
+        background-color: darkblue;
+        color: white;
+        padding: 10px 15px;
+    }
+
+    /*
+        .bg-header{
+        background-color: #183153!important;
+    }
+    .bg-back{
+            background-color:  #3da8f4;
+        }
+        .bg-input{
+            background-color: #e4e0e0;
+        }
+        .text-color{
+            color:  #183153;
+        }
+        .img-rad{
+            border-radius: 12px;
+        }
+        .bg-spl{
+            background-color:#2188e8;/* #205ead;
+        }
+    .bg-spl2{
+        background-color: #205ead;
+    }
+    */
+
+    
+</style>
+
+<header class="" >
+    <nav class="navbar navbar-expand-md  fixed-top navbar-dark bg-header  justify-content-center">
+       <div class="container-fluid ">
+           
+           <a href="/" class="navbar-brand " data-bs-toggle="tooltip" aria-label="Brand" data-bs-original-title="Brand">
+               <img src="{{url_for('static',filename='images/2.png')}}" class="rounded-circle" alt="" style="width: 45px; height: 45px;">
+           </a>
+           <!--
+                <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#prof">profile</button>
+           data-bs-toggle="tooltip"
+            -->
+           <div class="access1 d-flex flex-row   px-4 pe-0 gap-1 order-2 order-lg-3 order-md-3">
+               <a href="/aritfusion/buyer/" data-bs-toggle="modal" title="Profile" data-bs-target="#prof" class="navbar-brand  align-items-center m-0">
+                <img src={{imgdata}} alt="" height="40" width="40" name="profile" class="rounded-circle bg-light border border-info m-0 p-0 ms-1">
+                </a>
+             <!---   <a href="./wishlist.html" data-bs-toggle="tooltip" title="Wishlist" class="navbar-brand  align-items-center m-0">
+                    <img src="./../images/heart-solid.svg" width="40" height="40" alt=""  name="wishlist" class="rounded-circle bg-light border border-info m-0 p-1 ms-1">
+                </a>
+            -->
+                <a href="/buyer/cart" data-bs-toggle="tooltip" class="navbar-brand  align-items-center m-0" aria-label="Cart" data-bs-original-title="Cart">
+                   <img src="{{url_for('static',filename='images/cart.jfif')}}" width="40" height="40" alt="" name="cart" class="rounded-circle bg-light border border-info m-0 p-1 ms-1">
+                </a>
+           </div>
+           <button class="navbar-toggler order-3 order-lg-2 order-md-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#colapnavbar" aria-expanded="false">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+           <div class="navbar-collapse order-1 mx-3 order-4 order-md-2 order-lg-2 collapse" id="colapnavbar" style="">
+                
+                <ul class="navbar-nav align-items-baseline">
+                 <!---
+                    <li class="nav-item">
+                        <div  class="nav-link w-100 order-m-3 d-flex align-items-center justify-content-center mt-2">
+                            <input id="inp" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="min-width: 25vw;">
+                            <button class="btn btn-outline-success" 
+                            data-bs-toggle="modal"
+                            data-bs-target="#sear"
+                            type="submit" id="searchbtn">Search</button>
+                         </div>
+                        
+                    </li>
+                    --->
+                    <li class="nav-item ">
+                        <a class="nav-link" data-bs-toggle="tooltip" href="/buyer/wishlist" data-bs-original-title="Wishlist">Wishlist</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" data-bs-toggle="tooltip" href="/buyer/order" data-bs-original-title="Orders">Orders</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="/" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Category </a>
+                        <ul class=" dropdown-menu dropdown-menu-dark bg-header">
+                            <li class="dropdown-item "><a class="nav-link navstyle " href="/buyer#jewelry">Jewelry</a></li>
+                            <li class="dropdown-item "><a class="nav-link navstyle " href="/buyer#homedecor">Home Decor</a></li>
+                            <li class="dropdown-item "><a class="nav-link navstyle " href="/buyer#pottery">Pottery</a></li>
+                            <li class="dropdown-item "><a class="nav-link navstyle " href="/buyer#toys">Toys &amp; games </a></li>
+                            <li class="dropdown-item "><a class="nav-link navstyle " href="/buyer#furnitures">Funitures</a></li>
+                            <li class="dropdown-item "><a class="nav-link navstyle " href="/buyer#artworks">Art Works</a></li>
+                         </ul>    
+                    </li>
+                </ul>              
+        </div>
+           
+       </div>
+   </nav>
+</header>

@@ -1,0 +1,90 @@
+<style>
+    main{
+        min-height: 83vh!important;
+    }
+    header{
+        height: 4.4rem;
+    }
+    .bg-header{
+        background-color: #55021a!important;
+    }
+    .darkborder{
+        border: 2px solid #55021a!important;
+    }
+    .bg-back{
+        background-color: #fecce3!important;
+    }
+    .bg-spl{
+        background-color: #f83c86!important;
+    }
+    .bg-spl2{
+        background-color: #fe68a7!important;
+    }
+    .text-dark,.text-color{
+        color:  #55021a!important;
+    }
+    .text-light{
+        color: #fecce3!important;
+    }
+    .tdata,.tdata1{
+        background-color: #fee5f0!important;
+        color:  #55021a!important;
+    }
+    .btn-dark{
+        background-color: #e91f64!important;
+        color: #fee5f0!important;
+    }
+    .btn-outline-dark{
+        border: 1px solid #e91f64!important;
+        background-color: transparent!important;
+        color: #e91f64!important;
+    }
+    .btn-outline-dark:hover{
+        color: #fee5f0!important;
+        background-color: #e91f64!important;
+    }
+    .border-dark{
+        border: 1px solid #e91f64!important;
+    }
+</style>
+<header >
+    <nav class="navbar navbar-expand-md  fixed-top navbar-dark bg-header text-dark justify-content-center">
+       <div class="container-fluid ">
+           
+           <a href="/" class="navbar-brand " data-bs-toggle="tooltip" aria-label="Brand" data-bs-original-title="Brand">
+               <img src="{{ url_for('static', filename='images/2.png') }}" class="rounded-circle" alt="" style="width: 50px; height: 50px;">
+           </a>
+           
+           <div class="access1 d-flex flex-row   px-4 pe-0 gap-1 order-2 order-lg-3 order-md-3">
+               <a href="userprofile" data-bs-toggle="modal" title="Profile" data-bs-target="#prof" class="navbar-brand  align-items-center m-0">
+                    <img src={{imgdata}} alt="" height="40" width="40" name="profile" class="rounded-circle bg-light border border-dark m-0  ms-1">
+                </a>
+           </div>
+           <button class="navbar-toggler order-3 order-lg-2 order-md-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#colapnavbar" aria-expanded="false">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+           <div class="navbar-collapse order-1 mx-3 order-4 order-md-2 order-lg-2 collapse" id="colapnavbar" style="">
+                
+                <ul class="navbar-nav align-items-baseline order-4  col-md-12 col-sm-12 col-12 ps-3">
+                    <li class="nav-item text-dark ">
+                        <a class="nav-link text-light" data-bs-toggle="tooltip" href="home" data-bs-original-title="Home">Admin Dashboard</a>
+                    </li>
+                    <li class="nav-item text-dark ">
+                        <a class="nav-link text-light" data-bs-toggle="tooltip" href="product" data-bs-original-title="Products">Products</a>
+                    </li>
+                    <li class="nav-item text-dark ">
+                        <a class="nav-link text-light" data-bs-toggle="tooltip" href="order" data-bs-original-title="Orders">Orders</a>
+                    </li>
+                    <li class="nav-item text-dark ">
+                        <a class="nav-link text-light" data-bs-toggle="tooltip" href="buyer" data-bs-original-title="Buyers">Buyers</a>
+                    </li>
+                    <li class="nav-item text-dark ">
+                        <a class="nav-link text-light" data-bs-toggle="tooltip" href="seller" data-bs-original-title="Articians">Articians</a>
+                    </li>
+                    
+                </ul>              
+            </div>
+           
+       </div>
+   </nav>
+</header>

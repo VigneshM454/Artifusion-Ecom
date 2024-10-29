@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %} Wishlist {% endblock %}
+
+{% block content %}
+
+    <style>
+        .wlMain{
+            min-height: 84vh;
+        }
+    </style>
+</head>
+<body>
+    {% include "header.html" %}
+
+    <main class="p-4 bg-back wlMain">
+       {%if count>0 and prods|length>0  %}
+       <h1 id="whead">My Wishlist</h1>
+       <div class="table-responsive">
+        <table class="table " id="wtable">
+            <thead>
+                <th>No.</th>
+                <th>Image</th>
+                <th>Product name</th>
+                <th>Unit Price</th>
+                <th>Options</th>
+            </thead>
+            <tbody id="wishtable">
+                {% for prod in prods %}
+                    <tr>
+                        <td>{{loop.index}}</td>
+                        <td><img src="{{prod[3]}}" alt="" height="50px" width="50px" style="border:2px solid black; border-radius:10px"></td>
+                        <td>{{prod[1]}}</td>
+                        <td>₹{{prod[2]}} /-</td>
+                        <td>
+                            <div class="pe-2 ">
+                                <button id="addcart-{{prod[0]}}" onclick="addcartfn({{prod[0]}} , {{prod[4]}})" class=" btn bg-header text-light col-12 m-1 col-md-5 col-lg-5 h-100 btn1 p-md-2  p-lg-2">Add_Cart</button>    
+                                <button id="remove-{{prod[0]}}" onclick="removefn({{prod[0]}})" class=" btn bg-header text-light col-12 m-1 col-md-5 col-lg-5 h-100 p-md-2 p-lg-2  btn1">Remove</button>        
+                            </div>
+                        </td>   
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+       </div>
+       {% else %}
+       <div id="wishtable2" class="w-100 d-flex h-100 align-items-center justify-content-center"  style="min-height: 65vh;">
+        <h1>You have no products in your wishlist</h1>
+       </div>
+       
+       {% endif %}
+
+   </main>
+   {% include "modal.html" %}
+    <script src="{{ url_for('static', filename='js/wishlist.js')}}"></script>
+{% endblock %}
+

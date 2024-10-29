@@ -1,0 +1,43 @@
+<header class="" >
+    <nav class="navbar navbar-expand-md  fixed-top navbar-dark bg-header  justify-content-center">
+       <div class="container-fluid ">
+           
+           <a href="" class="navbar-brand " data-bs-toggle="tooltip" aria-label="Brand" data-bs-original-title="Brand">
+               <img src="{{ url_for('static', filename='images/2.png') }}" class="rounded-circle profimg" alt="" style="width: 55px; height: 55px;">
+           </a>
+           
+           <div class="access1 d-flex flex-row   px-4 pe-0 gap-1 order-2 order-lg-3 order-md-3">
+               <a href="/seller/userprofile" data-bs-toggle="modal" title="Profile" data-bs-target="#prof" class="navbar-brand  align-items-center m-0">
+                    <img src={{imgdata}} alt="" height="50" width="50" name="profile" class="rounded-circle bg-light  m-0  ms-1 profimg">
+                </a>
+           </div>
+           <button class="navbar-toggler order-3 order-lg-2 order-md-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#colapnavbar" aria-expanded="false">
+            <span class="navbar-toggler-icon ">'</span>
+            </button>
+           <div class="navbar-collapse order-1 mx-3 order-4 order-md-2 order-lg-2 collapse" id="colapnavbar" style="">
+                
+                <ul class="navbar-nav align-items-baseline order-4 col-12 col-sm-12 mt-3 ms-3 mt-md-0 mt-lg-0 ms-lg-0 d-flex gap-md-3 gap-3 gap-sm-3">
+                    <li class="nav-item ">
+                        <a class="nav-link" data-bs-toggle="tooltip" href="/seller/home" data-bs-original-title="Home">Home</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" data-bs-toggle="tooltip" href="/seller/order" data-bs-original-title="Orders">Orders</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" data-bs-toggle="tooltip" href="/seller/products" data-bs-original-title="Products">Products</a>
+                    </li>
+                    
+                </ul>              
+        </div>
+           
+       </div>
+   </nav>
+</header>
+<style>
+    .profimg{
+            border: 1px solid #205ead;
+    }
+    header{
+        height: 4.4rem;
+    }
+</style>

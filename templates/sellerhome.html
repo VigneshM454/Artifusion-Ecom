@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+
+{% block title %} Seller-Home {% endblock %}
+
+{% block content %}
+    <style>
+        #paymentchart,#prodqtchart{
+            max-height: 40vh;
+        }
+        .pimg{
+            height: 50px;
+            width: 50px;
+        }
+        .salestat{
+            border: 5px solid black;
+            border-radius: 20px;
+            min-width: 160px;
+            max-width: 350px;
+        }
+        .graphs{
+            min-width: 450px;
+            min-height: 450px;
+        }
+        .graphsdiv{
+            overflow: scroll;
+        }
+        .shop-img{
+            height: 80vh;
+            width: 70vw;
+            background-color: grey;
+            min-width: 280px;
+        }
+        .smallgraph{
+            min-height: 150px;
+            border: 2px solid #6fc3f3;
+        }
+        .biggraph{
+            min-height: 360px;
+            border: 2px solid #6fc3f3;
+        }
+        .tpslimg{
+            height: 70px;
+            width: 70px;
+        }
+        .prodsimg{
+            width:80px; 
+            height:80px;
+            border-radius: 10px;
+            border: 2px solid black;
+        }
+        td{
+            position: relative;
+        }
+        .tdata{                
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            margin: 0 !important;
+            top: 0;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            right: 0;
+        }
+
+    </style>
+    {% include "sellerheader.html" %}
+    
+  <main class="container-fluid">
+    <section class="s " id="sh">
+        </br>
+        <div id="performance" class="row  gap-3 px-3 m-0">
+            <div class="salestat col col-sm col-md col-lg d-flex flex-row justify-content-around  align-items-center bg-spl text-dark py-2 border">
+                <img class="col-3 pimg" src="{{url_for('static',filename='images/sales.png')}}" alt="">
+                <div class="row col-9">
+                    <h6 class="my-1">Total Sales</h6>
+                    <p class="my-1"><b id="totsale">{{totamt}}</b> </p>    
+                </div>
+            </div>
+            <div class="salestat col col-sm col-md col-lg d-flex flex-row justify-content-around align-items-center bg-spl text-dark py-2 border">
+                <img class="col-3 pimg" src="{{url_for('static',filename='images/shopping-bag.png')}}" alt="">
+                <div class="row col-9">
+                    <h6 class="my-1">Total Orders</h6>
+                    <p class="my-1"><b>{{countorders}}</b> </p>
+                </div>
+            </div>
+            <div class="salestat col col-sm col-md col-lg d-flex flex-row justify-content-around align-items-center bg-spl text-dark py-2 border">
+                <img class="col-3 pimg" src="{{url_for('static',filename='images/supply-chain.png')}}" alt="">
+                <div class="row col-9">
+                    <h6 class="my-1"> Total Products</h6>
+                    <p class="my-1"> <b>{{prodscount}}</b> </p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div id="grapdivs" class="row  p-1 d-flex justify-content-around m-0">
+            <div class="salesgraph graphsdiv biggraph col-12 col-md-6 col-lg-6 bg-light p-2  " >
+                <p><b> Sales</b>  </p>
+                <canvas id="saleschart" class="graphs" width="400" height="400"></canvas>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6 row p-0 gap-1 d-flex justify-content-around">    
+                <div class="smallgraph graphsdiv row bg-light col-12 p-0 ">
+                    <p><b> Products</b> </p>
+                    <canvas id="prodqtchart" width="400" class="graphs"
+					height="400"></canvas>
+                </div>
+                <div class="smallgraph bg-light col-12 p-0">
+                    <p><b> Payment</b> </p>
+                    <canvas id="paymentchart" width="400"
+					height="400"></canvas>
+                </div>
+            </div>
+        </div>
+
+        {% set topProdLen = topselprod['ProdName']|length %}
+        {% if topProdLen!=0%}
+        <div class="topselprod mt-5">
+            <h1 class="my-4">Top Selling Products</h1>
+
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover table-info border-dark">
+                    <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th class="text-center">ProdImg</th>
+                            <th class="col-5 text-center pname">ProdName</th>
+                            <th class="text-center">Quantiy Listed</th>
+                            <th class="text-center">Quantity Sold</th>
+                            <th class="text-center">UnitPrice</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in range(topProdLen) %}
+                        <tr>
+                            <td><p class="tdata">{{i}}</p> </td>
+                            <td class="d-flex align-items-center justify-content-center">
+                                <img src="{{topselprod['ProdImg'][i]}}" alt="" class="prodsimg ">
+                            </td>
+                            <td >
+                                <p class="tdata p-2"><b>{{topselprod['ProdName'][i]}}</b> </p>
+                            </td>
+                            <td>
+                                <p class="tdata p-2"><b>{{topselprod['QuantityListed'][i]}}</b></p>
+                            </td>
+                            <td>
+                                <p class="tdata"> <b>{{topselprod['QuantitySold'][i]}}</b>  </p>
+                            </td>
+                            <td>
+                                <h6 class="tdata">₹ {{topselprod['ProdPrice'][i]}}</h6>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        {% else %}
+        <br>
+        {% endif %}
+       
+    
+    </section>
+    </main>
+    
+   <br>
+   {% include "modal.html" %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js">
+    </script>    
+
+    <script>
+        let totsale=document.getElementById('totsale')
+        //console.log(totsale.textContent)
+                
+        const ctx = document.getElementById('paymentchart').getContext('2d');
+        const stx=document.getElementById('saleschart').getContext('2d')
+        const qtx=document.getElementById('prodqtchart').getContext('2d')
+        
+        const myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Pay on Delivery',  'Pay on Order'],
+                datasets: [{
+                    label: 'Payments',
+                    data: {{ paymethod_data | safe }},
+                    backgroundColor: ['blueviolet','fuchsia'],
+                    borderColor: 'black',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const schart=  new Chart(stx, {
+            type: 'bar',
+            data: {
+                labels: {{prodlabel | safe }},
+                datasets: [{
+                    label: 'Payments',
+                    data: {{ prodsalearr | safe }},
+                    backgroundColor: ['green','red'],
+                    borderColor: 'black',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const qchart=  new Chart(qtx, {
+            type: 'bar',
+            data: {
+                labels: {{prodlabel | safe }},
+                datasets: [{
+                    label: 'Quantity',
+                    data: {{ prodqtarr | safe }},
+                    backgroundColor: ['green'],
+                    borderColor: 'black',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+    </script>
+    <script src="{{url_for('static',filename='js/sellerhomemaps.js')}}"></script>
+{% endblock %}

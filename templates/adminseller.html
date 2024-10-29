@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block title %} Admin-Seller {% endblock %}
+
+{% block content %}
+    <style>
+        .show1{
+            display: contents;
+        }
+        .hide1{
+            display: none;
+        }  
+        .prodsimg{
+            width:80px; 
+            height:80px;
+            border-radius: 10px;
+            border: 2px solid black;
+        }
+        td{
+            position: relative;
+        }
+        .ov{
+            overflow: auto;
+        }
+              
+    </style>
+    {% include "adminheader.html" %}
+  
+   <main class="p-3 bg-back text-dark" >
+    {% set arr_length = sellertable1|length %}
+    {% set pg_length =pagearr|length %}
+
+    {% if arr_length !=0  %}
+    <section class="sa1" id="sart">
+        <h3 class="my-3">Seller  (or)Artician </h3>
+        <div class="table-responsive">
+            <table class="table table-bordered  table-hover bg-back border-dark">
+                <thead>
+                    <tr>
+                        <th class="text-center bg-spl text-light">SellerId</th>
+                        <th class="text-center bg-spl text-light">Name</th>
+                        <th class="text-center bg-spl text-light">Profile</th>
+                        <th class="text-center bg-spl text-light">Mobile</th>
+                        <th class="text-center bg-spl text-light">Email</th>
+                        <th class="text-center bg-spl text-light">Address</th>
+                        <th class="text-center bg-spl text-light">Shop Name</th>
+                        <th class="text-center bg-spl text-light">Delete Seller</th>                    
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for j in range(pg_length) %}
+                    {% if j==0 %}
+                        {% set cls= 'show1' %}
+                    {% else %}
+                        {% set cls= 'hide1' %}
+                    {% endif %}
+                    <tbody class="bg-danger p-2 m-2 bd {{cls}}" id="bd{{j}}">
+                    {% for k in range(j*5,(j+1)*5) %}
+                        {% if k < arr_length %}
+                        <tr class="bg-dark ">
+                            <td class="text-center tdata">{{sellertable1[k][7]}}</td>
+                            <td class="text-center tdata">
+                                {% if sellertable1[k][0] %}
+                                    <img src="{{sellertable1[k][0]}}" alt="Seller_Img" class="prodsimg border-dark"/>
+                                {% else  %}
+                                    <img src="{{defaultImg}}" alt="Seller_Img" class="prodsimg border-dark"/>
+                                {% endif %}
+                            </td>
+                            <td class="text-center tdata">{{sellertable1[k][1]}} {{sellertable1[k][2]}}</td>
+                            <td class="text-center tdata">{{sellertable1[k][3]}}</td>
+                            <td class="text-center tdata">{{sellertable1[k][4]}}</td>
+                            <td class="text-center tdata">{{sellertable1[k][5]}}</td>
+                            <td class="text-center tdata">{{sellertable1[k][6]}}</td>    
+                            <td class="text-center tdata"><button class="btn btn-outline-dark" onclick="deleteSeller({{sellertable1[k][7]}},'{{sellertable1[k][4]}}')">Delete</button></td>                    
+                        </tr>
+                        {% endif %}    
+                    {% endfor %}
+                    </tbody>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <nav class="ov" aria-label="Page navigation example">
+        <ul class="pagination">
+        {% if a>1 %}
+        {% for i in range(a) %}              
+            <li class="page-item"><button class="btn-dark page-link pg{{i}}" onclick="changecontent({{i}})" >{{i}}</button></li>
+        {% endfor %}
+        {% endif %}
+        </ul>
+    </nav>
+
+    {% else %}
+    <div class="d-flex align-items-center justify-content-center" style="min-height: 85vh;">
+        <h1>No Buyers so far!</h1>
+    </div>
+    {% endif %}
+
+   </main>
+   {% include 'deleteDiv.html' %}
+    {% include "modal.html" %}
+    <script>
+
+
+document.getElementById('divTitle').innerText='Delete user'
+    document.getElementById('deleteBtn').innerText='Delete '
+
+    const deleteDiv=document.getElementById('deleteDiv')
+    document.getElementById('divclose').onclick=()=>{
+        deleteDiv.style.display='none'
+    }
+    document.getElementById('cancelDelBtn').onclick=()=>{
+        deleteDiv.style.display='none'
+    }
+    function deleteSeller(userId,userMail){
+        deleteDiv.style.display='flex'
+        document.getElementById('divPara').innerHTML=`Are you sure want to delete this seller ? <b>${userMail}, all his products will also be deleted!</b>`
+        document.getElementById('deleteBtn').onclick=()=>{
+            deleteDiv.style.display='none'
+            //console.log(userId)
+            //console.log(userId)
+            //console.log(typeof userId);
+            //console.log(userMail)
+
+            fetch(`${window.origin}/admin/seller-delete`,{
+                method:'DELETE',
+                headers:{
+                    'Content-Type':'application/json',
+                },
+                body:JSON.stringify({userId:userId,userMail:userMail}),
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                //console.log(data);
+                //console.log(data.status_code);    
+                if(data.status_code==200){
+                    window.location.reload();
+                    displayToast(data.message,'success')
+                }else{
+                    displayToast(data.message,'danger')
+                }
+            }).catch(err=> {
+                //console.log(err)
+                displayToast(data.message,'danger')
+            })            
+        }
+    }
+
+
+        const bdarr=document.querySelectorAll('.bd')
+        function changecontent(i){
+            bdarr.forEach((elem) => {
+                elem.style.display='none'
+                //elem.classList.remove('show1')
+                //elem.classList.add('hide1')
+            });
+            document.getElementById('bd'+i).style.display='contents'
+        }
+    </script>
+
+{% endblock %}

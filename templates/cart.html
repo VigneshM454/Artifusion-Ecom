@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %} Cart {% endblock %}
+
+{% block content %}
+
+    <link rel="stylesheet" href="{{url_for('static',filename='css/cart.css')}}">
+    <style>
+        
+    </style>
+</head>
+<body>
+    {% include "header.html" %}
+
+   <main class=".container-fluid p-3 bg-back" style="min-height: 100vh;">
+    <h1 id="tcart">Shopping Cart</h1>
+    <div class="subtot p-3" id="scart">
+        <hr class="tcart">
+        <h4>Subtotal <span name="prod-count"> </span> items <span class="h1" id="tot-price"> </span></h4>
+        <br>
+        <button id="buyAll" class="btn bg-header text-white">Proceed to buy( <span name="prod-count"> </span> items)</button>
+        <hr>
+    </div>
+   
+  
+    <section id="products" class="d-flex  flex-column justify-content-center"></section>
+</main>
+{% include "modal.html" %}
+ <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+{% endblock %}

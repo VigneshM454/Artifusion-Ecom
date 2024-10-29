@@ -1,0 +1,7 @@
+.vertical-line {
+    border-left: 1px solid #ccc; /* Adjust color and thickness as needed */
+    height: 100%; /* Adjust height as needed */
+    margin: 0 auto; /* Center the line vertically */
+    text-align: center;
+    width: 1px;
+}

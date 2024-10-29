@@ -1,0 +1,33 @@
+<style>
+    #deleteDiv{
+        display: none;
+        position: absolute;
+        top: 25%;
+        left: 5%;
+        border: 1px solid black;
+        border-radius: 10px;
+        z-index: 3;
+        min-width: 250px;
+        max-width: 250px;
+        box-shadow: 0 0 50px black;
+    }
+    #divclose{
+        font-family: sans-serif;
+        text-shadow: 0 0 10px black;
+        cursor: pointer;
+    }
+    #divPara{
+        overflow-wrap: break-word;
+    }
+</style>
+<div class="deleteDiv bg-light text-dark p-3  flex-column gap-3" id="deleteDiv">
+    <div class="divhead d-flex flex-row justify-content-end" >
+      <h5 class="m-0 text-end" id="divclose">X</h5>
+    </div>
+    <h3 class="m-0 text-center" id="divTitle"></h3>
+    <p class="text-center ps-1 m-0" id="divPara"></p>
+    <div class="d-flex flex-row gap-1">
+        <button class="btn btn-danger" id="deleteBtn" ></button>
+        <button class="btn btn-dark" id="cancelDelBtn" >Cancel</button>
+    </div>
+</div>
