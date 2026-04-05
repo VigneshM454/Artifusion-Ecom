@@ -10,7 +10,7 @@ db_config = {
     'host': os.getenv('DB_HOST'),
     'port': int(os.getenv('DB_PORT')),
     'database': os.getenv('DB_NAME'),
-    'ssl_ca': os.getenv('DB_SSL')  # Update path to your CA certificate
+    'ssl_ca': "ca.pem"  # Update path to your CA certificate
 }
 
 def initialize_db():

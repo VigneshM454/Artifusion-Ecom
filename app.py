@@ -12,6 +12,8 @@ from datetime import timedelta
 from flask_session import Session
 from itsdangerous import URLSafeTimedSerializer
 from flask_sqlalchemy import SQLAlchemy
+from apscheduler.schedulers.background import BackgroundScheduler
+
 load_dotenv()
 
 app=Flask(__name__)
@@ -20,13 +22,14 @@ app.config['SECRET_KEY']=os.getenv('APP_SECRET_KEY')
 db=initialize_db()
 
 #configuring session 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_URI').replace("mysql://", "mysql+pymysql://")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_URI3').replace("mysql://", "mysql+pymysql://")
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_pre_ping': True,    # Refresh stale connections
     'pool_recycle': 1800       # Recycle connections every 30 minutes
 }
 app.config['SESSION_TYPE'] = 'sqlalchemy'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
+app.config['SESSION_SQLALCHEMY_TABLE'] = 'sessions'
 sessionDb=SQLAlchemy(app)
 app.config['SESSION_SQLALCHEMY'] = sessionDb
 Session(app) #app.permanent_session_lifetime=timedelta(days=7)
@@ -57,6 +60,34 @@ def send_mail(recvr,rotp,title,msgBody='Your one time password for signing into 
     except Exception as e:
         print(e)
         return "the email was not send {e}"         
+# Job to keep the the application live
+
+def keepLive():
+    print("Running every 1 hour")
+    conn = None
+    cursor = None
+    try:
+        conn = initialize_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM products1")
+        result = cursor.fetchone()
+        print("Total products:", result[0])
+    except Exception as e:
+        print("ERROR:", e)
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()   
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(
+    func=keepLive,
+    trigger="interval",
+    hours=1  
+)
+scheduler.start()
+
             
 @app.before_request
 def check_session():
@@ -233,6 +264,7 @@ def handlesellerdata():
 
         print('session temp data is ',session.get('tempdata'))
         return jsonify({'status_code': 200})
+    
 
 @app.route("/admintest", methods=['POST'])
 def testadmin():

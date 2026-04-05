@@ -151,11 +151,13 @@ def addmoreqty():
     req=request.get_json()
     if req:
         user_data= session.get('user',{}).get('data')
-        # print(req)
+        print(req)
         # print(type(req['pid']))
         # print(req['pqty'])
-        a=fetchoneData('SELECT qtyavail FROM products1 WHERE productid= {0} AND sellerid = {1}'.format(req['pid'],user_data[0]))
-        newqty=req['pqty']+a[0]
+        print("from addMoreQty")
+        print(user_data)
+        product=fetchoneData('SELECT qtyavail FROM products1 WHERE productid= {0} AND sellerid = {1}'.format(req['pid'],user_data[0]))
+        newqty=req['pqty']+product[0]
         update_logs=updateOrDelete(("UPDATE products1 SET qtyavail = {0} WHERE productid = {1}".format(newqty,req['pid'])),None,True)
         if update_logs is True:
             return {'status_code':200}

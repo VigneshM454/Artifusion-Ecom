@@ -101,9 +101,9 @@ def ahome():
         count1=fetchallData('SELECT productid,totamt,paymethod,orderqty FROM demoorders  ORDER BY productid')
         totpayonorder,totpayondelivery=0,0
         prod_tot_rel,prodsalearr,prodqtarr=[],[],[]
+        count=[]
 
         if len(count1)>0:
-            count=[]
             tupletolist(count1,count)
             print(count)
             tot=0

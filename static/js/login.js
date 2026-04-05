@@ -25,6 +25,7 @@ document.getElementById('otpclose').onclick=()=>{
 function verifyOtp(user){// this is used while creating new buyer/ seller accounts
     otpBtn.addEventListener('click',()=>{
         if((otpinput.value).length===8 && otpdiv.style.display=='flex'){
+            otpdiv.style.display = 'none'
             var otp=parseInt(otpinput.value)
             //console.log(otp)
             const verifydata={user,otp}
@@ -52,6 +53,7 @@ function verifyAdmin(){
     otpBtn.addEventListener('click',()=>{
         if((otpinput.value).length===8 && otpdiv.style.display=='flex'){
             var otp=parseInt(otpinput.value)
+            otpdiv.style.display = 'none'
             //console.log(otp)
             const verifydata={otp}
             fetch(`${window.origin}/verify-admin`,{
@@ -227,6 +229,8 @@ const pwd2=user_login.querySelector('#pwd');
 
 user_login.addEventListener('submit',(event)=>{
     event.preventDefault();
+    user_sign.disabled = true;
+    user_sign.style.opacity = 0.1;
     let count=1;
     var e2=emailRegex.test(email2.value)
     var p2=pwd2.value.length>5;
@@ -285,7 +289,12 @@ user_login.addEventListener('submit',(event)=>{
             })
             .catch(function(){
                 //console.log('no response');
-            })        
+            })  
+            .finally()
+            {
+                user_sign.disabled = false;
+                user_sign.style.opacity = 1;            
+            }      
         }
 
         })    
