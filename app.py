@@ -29,7 +29,7 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
 }
 app.config['SESSION_TYPE'] = 'sqlalchemy'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
-app.config['SESSION_SQLALCHEMY_TABLE'] = 'sessions'
+#app.config['SESSION_SQLALCHEMY_TABLE'] = 'sessions'
 sessionDb=SQLAlchemy(app)
 app.config['SESSION_SQLALCHEMY'] = sessionDb
 Session(app) #app.permanent_session_lifetime=timedelta(days=7)
