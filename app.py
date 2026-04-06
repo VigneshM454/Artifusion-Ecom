@@ -60,34 +60,6 @@ def send_mail(recvr,rotp,title,msgBody='Your one time password for signing into 
     except Exception as e:
         print(e)
         return "the email was not send {e}"         
-# Job to keep the the application live
-
-def keepLive():
-    print("Running every 1 hour")
-    conn = None
-    cursor = None
-    try:
-        conn = initialize_db()
-        cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(*) FROM products1")
-        result = cursor.fetchone()
-        print("Total products:", result[0])
-    except Exception as e:
-        print("ERROR:", e)
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()   
-
-scheduler = BackgroundScheduler()
-scheduler.add_job(
-    func=keepLive,
-    trigger="interval",
-    hours=1  
-)
-scheduler.start()
-
             
 @app.before_request
 def check_session():
